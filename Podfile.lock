@@ -1,0 +1,16 @@
+PODS:
+  - VEAudioKit (0.0.1)
+
+DEPENDENCIES:
+  - VEAudioKit (from `./VEAudioKit.podspec`)
+
+EXTERNAL SOURCES:
+  VEAudioKit:
+    :path: "./VEAudioKit.podspec"
+
+SPEC CHECKSUMS:
+  VEAudioKit: 61c6a05784515157635f9f28d6696a2eaf4f6924
+
+PODFILE CHECKSUM: 80d675196d728e83574b12d896b860c85641edef
+
+COCOAPODS: 1.7.3

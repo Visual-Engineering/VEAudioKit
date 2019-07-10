@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3AA206BA05DBAE7DDA4BD4FB /* Pods_VEAudioKitDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DC69F3311A0D7AB76E4F0D /* Pods_VEAudioKitDemoTests.framework */; };
+		86C5ADD9E1C2B70082A6C472 /* Pods_VEAudioKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1AD539BC287AF286952DEBC /* Pods_VEAudioKitDemo.framework */; };
+		F45A76D422D341E300BCE573 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76D322D341E300BCE573 /* AppDelegate.swift */; };
+		F45A76D622D341E300BCE573 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76D522D341E300BCE573 /* ViewController.swift */; };
+		F45A76DB22D341E500BCE573 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F45A76DA22D341E500BCE573 /* Assets.xcassets */; };
+		F45A76DE22D341E500BCE573 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F45A76DC22D341E500BCE573 /* LaunchScreen.storyboard */; };
+		F45A76E922D341E600BCE573 /* VEAudioKitDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76E822D341E600BCE573 /* VEAudioKitDemoTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F45A76E522D341E600BCE573 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F45A76C822D341E300BCE573 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F45A76CF22D341E300BCE573;
+			remoteInfo = VEAudioKitDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6C3AB9E56BB9129BC8A6394F /* Pods-VEAudioKitDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VEAudioKitDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-VEAudioKitDemoTests/Pods-VEAudioKitDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C92FD36390136CB5CDF2ADD9 /* Pods-VEAudioKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VEAudioKitDemo.release.xcconfig"; path = "Target Support Files/Pods-VEAudioKitDemo/Pods-VEAudioKitDemo.release.xcconfig"; sourceTree = "<group>"; };
+		C9DC69F3311A0D7AB76E4F0D /* Pods_VEAudioKitDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VEAudioKitDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1AD539BC287AF286952DEBC /* Pods_VEAudioKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VEAudioKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA1C8A1665E8B10FD0FAB27B /* Pods-VEAudioKitDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VEAudioKitDemoTests.release.xcconfig"; path = "Target Support Files/Pods-VEAudioKitDemoTests/Pods-VEAudioKitDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		EAD791DD1CC06720EE967E09 /* Pods-VEAudioKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VEAudioKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-VEAudioKitDemo/Pods-VEAudioKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		F45A76D022D341E300BCE573 /* VEAudioKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VEAudioKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F45A76D322D341E300BCE573 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F45A76D522D341E300BCE573 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F45A76DA22D341E500BCE573 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F45A76DD22D341E500BCE573 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F45A76DF22D341E500BCE573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F45A76E422D341E600BCE573 /* VEAudioKitDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VEAudioKitDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F45A76E822D341E600BCE573 /* VEAudioKitDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VEAudioKitDemoTests.swift; sourceTree = "<group>"; };
+		F45A76EA22D341E600BCE573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F45A76CD22D341E300BCE573 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86C5ADD9E1C2B70082A6C472 /* Pods_VEAudioKitDemo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F45A76E122D341E600BCE573 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3AA206BA05DBAE7DDA4BD4FB /* Pods_VEAudioKitDemoTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BCD33D1CFF5ADC451F7F239D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E1AD539BC287AF286952DEBC /* Pods_VEAudioKitDemo.framework */,
+				C9DC69F3311A0D7AB76E4F0D /* Pods_VEAudioKitDemoTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E00FD2CA2B9D384D6C56BAFC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EAD791DD1CC06720EE967E09 /* Pods-VEAudioKitDemo.debug.xcconfig */,
+				C92FD36390136CB5CDF2ADD9 /* Pods-VEAudioKitDemo.release.xcconfig */,
+				6C3AB9E56BB9129BC8A6394F /* Pods-VEAudioKitDemoTests.debug.xcconfig */,
+				EA1C8A1665E8B10FD0FAB27B /* Pods-VEAudioKitDemoTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F45A76C722D341E300BCE573 = {
+			isa = PBXGroup;
+			children = (
+				F45A76D222D341E300BCE573 /* VEAudioKitDemo */,
+				F45A76E722D341E600BCE573 /* VEAudioKitDemoTests */,
+				F45A76D122D341E300BCE573 /* Products */,
+				E00FD2CA2B9D384D6C56BAFC /* Pods */,
+				BCD33D1CFF5ADC451F7F239D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F45A76D122D341E300BCE573 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F45A76D022D341E300BCE573 /* VEAudioKitDemo.app */,
+				F45A76E422D341E600BCE573 /* VEAudioKitDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F45A76D222D341E300BCE573 /* VEAudioKitDemo */ = {
+			isa = PBXGroup;
+			children = (
+				F45A76D322D341E300BCE573 /* AppDelegate.swift */,
+				F45A76D522D341E300BCE573 /* ViewController.swift */,
+				F45A76DA22D341E500BCE573 /* Assets.xcassets */,
+				F45A76DC22D341E500BCE573 /* LaunchScreen.storyboard */,
+				F45A76DF22D341E500BCE573 /* Info.plist */,
+			);
+			path = VEAudioKitDemo;
+			sourceTree = "<group>";
+		};
+		F45A76E722D341E600BCE573 /* VEAudioKitDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				F45A76E822D341E600BCE573 /* VEAudioKitDemoTests.swift */,
+				F45A76EA22D341E600BCE573 /* Info.plist */,
+			);
+			path = VEAudioKitDemoTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F45A76CF22D341E300BCE573 /* VEAudioKitDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F45A76ED22D341E600BCE573 /* Build configuration list for PBXNativeTarget "VEAudioKitDemo" */;
+			buildPhases = (
+				7B3DE633EEF46138098F4C5C /* [CP] Check Pods Manifest.lock */,
+				F45A76CC22D341E300BCE573 /* Sources */,
+				F45A76CD22D341E300BCE573 /* Frameworks */,
+				F45A76CE22D341E300BCE573 /* Resources */,
+				909FAA3D72750770E2103031 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VEAudioKitDemo;
+			productName = VEAudioKitDemo;
+			productReference = F45A76D022D341E300BCE573 /* VEAudioKitDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F45A76E322D341E600BCE573 /* VEAudioKitDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F45A76F022D341E600BCE573 /* Build configuration list for PBXNativeTarget "VEAudioKitDemoTests" */;
+			buildPhases = (
+				9E36A186A73E32113F0DD1C7 /* [CP] Check Pods Manifest.lock */,
+				F45A76E022D341E600BCE573 /* Sources */,
+				F45A76E122D341E600BCE573 /* Frameworks */,
+				F45A76E222D341E600BCE573 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F45A76E622D341E600BCE573 /* PBXTargetDependency */,
+			);
+			name = VEAudioKitDemoTests;
+			productName = VEAudioKitDemoTests;
+			productReference = F45A76E422D341E600BCE573 /* VEAudioKitDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F45A76C822D341E300BCE573 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Visual Engineering";
+				TargetAttributes = {
+					F45A76CF22D341E300BCE573 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+					F45A76E322D341E600BCE573 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = F45A76CF22D341E300BCE573;
+					};
+				};
+			};
+			buildConfigurationList = F45A76CB22D341E300BCE573 /* Build configuration list for PBXProject "VEAudioKitDemo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F45A76C722D341E300BCE573;
+			productRefGroup = F45A76D122D341E300BCE573 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F45A76CF22D341E300BCE573 /* VEAudioKitDemo */,
+				F45A76E322D341E600BCE573 /* VEAudioKitDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F45A76CE22D341E300BCE573 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F45A76DE22D341E500BCE573 /* LaunchScreen.storyboard in Resources */,
+				F45A76DB22D341E500BCE573 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F45A76E222D341E600BCE573 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7B3DE633EEF46138098F4C5C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VEAudioKitDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		909FAA3D72750770E2103031 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VEAudioKitDemo/Pods-VEAudioKitDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VEAudioKitDemo/Pods-VEAudioKitDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VEAudioKitDemo/Pods-VEAudioKitDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9E36A186A73E32113F0DD1C7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VEAudioKitDemoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F45A76CC22D341E300BCE573 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F45A76D622D341E300BCE573 /* ViewController.swift in Sources */,
+				F45A76D422D341E300BCE573 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F45A76E022D341E600BCE573 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F45A76E922D341E600BCE573 /* VEAudioKitDemoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F45A76E622D341E600BCE573 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F45A76CF22D341E300BCE573 /* VEAudioKitDemo */;
+			targetProxy = F45A76E522D341E600BCE573 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F45A76DC22D341E500BCE573 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F45A76DD22D341E500BCE573 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F45A76EB22D341E600BCE573 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F45A76EC22D341E600BCE573 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F45A76EE22D341E600BCE573 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EAD791DD1CC06720EE967E09 /* Pods-VEAudioKitDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3TM6BZ8UW7;
+				INFOPLIST_FILE = VEAudioKitDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.visualengin.VEAudioKitDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F45A76EF22D341E600BCE573 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C92FD36390136CB5CDF2ADD9 /* Pods-VEAudioKitDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3TM6BZ8UW7;
+				INFOPLIST_FILE = VEAudioKitDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.visualengin.VEAudioKitDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F45A76F122D341E600BCE573 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C3AB9E56BB9129BC8A6394F /* Pods-VEAudioKitDemoTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3TM6BZ8UW7;
+				INFOPLIST_FILE = VEAudioKitDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.visualengin.VEAudioKitDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VEAudioKitDemo.app/VEAudioKitDemo";
+			};
+			name = Debug;
+		};
+		F45A76F222D341E600BCE573 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA1C8A1665E8B10FD0FAB27B /* Pods-VEAudioKitDemoTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3TM6BZ8UW7;
+				INFOPLIST_FILE = VEAudioKitDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.visualengin.VEAudioKitDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VEAudioKitDemo.app/VEAudioKitDemo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F45A76CB22D341E300BCE573 /* Build configuration list for PBXProject "VEAudioKitDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F45A76EB22D341E600BCE573 /* Debug */,
+				F45A76EC22D341E600BCE573 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F45A76ED22D341E600BCE573 /* Build configuration list for PBXNativeTarget "VEAudioKitDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F45A76EE22D341E600BCE573 /* Debug */,
+				F45A76EF22D341E600BCE573 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F45A76F022D341E600BCE573 /* Build configuration list for PBXNativeTarget "VEAudioKitDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F45A76F122D341E600BCE573 /* Debug */,
+				F45A76F222D341E600BCE573 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F45A76C822D341E300BCE573 /* Project object */;
+}
