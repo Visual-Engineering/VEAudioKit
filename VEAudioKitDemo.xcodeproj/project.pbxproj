@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,8 @@
 		F45A76DB22D341E500BCE573 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F45A76DA22D341E500BCE573 /* Assets.xcassets */; };
 		F45A76DE22D341E500BCE573 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F45A76DC22D341E500BCE573 /* LaunchScreen.storyboard */; };
 		F45A76E922D341E600BCE573 /* VEAudioKitDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76E822D341E600BCE573 /* VEAudioKitDemoTests.swift */; };
+		F45C427822D6318900E084BC /* airplane.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F45C427622D6318800E084BC /* airplane.mp3 */; };
+		F45C427922D6318900E084BC /* dog.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F45C427722D6318900E084BC /* dog.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		F45A76E422D341E600BCE573 /* VEAudioKitDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VEAudioKitDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45A76E822D341E600BCE573 /* VEAudioKitDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VEAudioKitDemoTests.swift; sourceTree = "<group>"; };
 		F45A76EA22D341E600BCE573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F45C427622D6318800E084BC /* airplane.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = airplane.mp3; sourceTree = "<group>"; };
+		F45C427722D6318900E084BC /* dog.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dog.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,8 @@
 				F45A76DA22D341E500BCE573 /* Assets.xcassets */,
 				F45A76DC22D341E500BCE573 /* LaunchScreen.storyboard */,
 				F45A76DF22D341E500BCE573 /* Info.plist */,
+				F45C427622D6318800E084BC /* airplane.mp3 */,
+				F45C427722D6318900E084BC /* dog.mp3 */,
 			);
 			path = VEAudioKitDemo;
 			sourceTree = "<group>";
@@ -209,8 +215,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F45C427822D6318900E084BC /* airplane.mp3 in Resources */,
 				F45A76DE22D341E500BCE573 /* LaunchScreen.storyboard in Resources */,
 				F45A76DB22D341E500BCE573 /* Assets.xcassets in Resources */,
+				F45C427922D6318900E084BC /* dog.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
