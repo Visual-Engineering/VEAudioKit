@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3AA206BA05DBAE7DDA4BD4FB /* Pods_VEAudioKitDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DC69F3311A0D7AB76E4F0D /* Pods_VEAudioKitDemoTests.framework */; };
 		86C5ADD9E1C2B70082A6C472 /* Pods_VEAudioKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1AD539BC287AF286952DEBC /* Pods_VEAudioKitDemo.framework */; };
+		F41B762922E5A657003D7794 /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41B762822E5A657003D7794 /* TracksView.swift */; };
 		F45A76D422D341E300BCE573 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76D322D341E300BCE573 /* AppDelegate.swift */; };
 		F45A76D622D341E300BCE573 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76D522D341E300BCE573 /* ViewController.swift */; };
 		F45A76DB22D341E500BCE573 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F45A76DA22D341E500BCE573 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		E1AD539BC287AF286952DEBC /* Pods_VEAudioKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VEAudioKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1C8A1665E8B10FD0FAB27B /* Pods-VEAudioKitDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VEAudioKitDemoTests.release.xcconfig"; path = "Target Support Files/Pods-VEAudioKitDemoTests/Pods-VEAudioKitDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		EAD791DD1CC06720EE967E09 /* Pods-VEAudioKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VEAudioKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-VEAudioKitDemo/Pods-VEAudioKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		F41B762822E5A657003D7794 /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		F45A76D022D341E300BCE573 /* VEAudioKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VEAudioKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45A76D322D341E300BCE573 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F45A76D522D341E300BCE573 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			children = (
 				F45A76D322D341E300BCE573 /* AppDelegate.swift */,
 				F45A76D522D341E300BCE573 /* ViewController.swift */,
+				F41B762822E5A657003D7794 /* TracksView.swift */,
 				F45A76DA22D341E500BCE573 /* Assets.xcassets */,
 				F45A76DC22D341E500BCE573 /* LaunchScreen.storyboard */,
 				F45A76DF22D341E500BCE573 /* Info.plist */,
@@ -302,6 +305,7 @@
 			files = (
 				F45A76D622D341E300BCE573 /* ViewController.swift in Sources */,
 				F45A76D422D341E300BCE573 /* AppDelegate.swift in Sources */,
+				F41B762922E5A657003D7794 /* TracksView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
