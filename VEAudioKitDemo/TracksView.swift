@@ -29,12 +29,7 @@ class TracksView: UIProgressView {
     }()
     
     private var indicatorLeadingConstraint: NSLayoutConstraint?
-    
-    private var tracks = [UIView]()
-    private var durations = [Float]()
-    
-    var duration: Float = 0
-    
+        
     override var progress: Float {
         didSet {
             if let constraint = indicatorLeadingConstraint {
@@ -78,7 +73,6 @@ class TracksView: UIProgressView {
         trackView.translatesAutoresizingMaskIntoConstraints = false
         trackView.backgroundColor = .white
         trackView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        tracks.append(trackView)
         tracksContainer.addArrangedSubview(trackView)
     }
 }
