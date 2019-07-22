@@ -75,7 +75,7 @@ class ViewController: UIViewController {
         tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration))
         
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
-        [controlsStackView, progressBar, tracksView, UIView()].forEach(contentStackView.addArrangedSubview)
+        [controlsStackView, tracksView, UIView()].forEach(contentStackView.addArrangedSubview)
     }
 
     private func setup() {
@@ -87,6 +87,7 @@ class ViewController: UIViewController {
         skipBackwardButton.addTarget(self, action: #selector(minus10), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrack))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(reset))
         
         progressBar.trackTintColor = .white
         progressBar.progressTintColor = .black
@@ -118,6 +119,13 @@ class ViewController: UIViewController {
     @objc func addTrack() {
         audioPlayer.appendAudioFile(url: dogAudioURL)
         tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.dropFirst().first!.duration))
+    }
+    
+    @objc func reset() {
+        audioPlayer.stop()
+        audioPlayer.scheduleFiles()
+        playButton.isSelected = false
+        tracksView.progress = 0
     }
 }
 

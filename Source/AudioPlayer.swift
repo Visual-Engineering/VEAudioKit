@@ -99,7 +99,7 @@ public class AudioPlayer {
     }
     
     public init() { }
-        
+    
     private func preparePlayer(for item: AudioFileItem) {
         let player = AVAudioPlayerNode()
         players.append(player)
@@ -132,6 +132,14 @@ public class AudioPlayer {
         guard isPlaying else { return }
         cancelTimer()
         players.forEach { $0.pause() }
+    }
+    
+    public func stop() {
+        players.forEach { $0.stop() }
+    }
+    
+    public func scheduleFiles() {
+        schedulers.forEach(schedule)
     }
     
     public func appendAudioFile(url: URL, delay: Float = 0) {
