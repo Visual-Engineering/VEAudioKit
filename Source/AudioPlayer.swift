@@ -78,9 +78,7 @@ public class AudioPlayer {
     }
     private var currentPosition: AVAudioFramePosition = 0
     
-    public var delegate: AudioPlayerDelegate?
-    
-    public var audioFileURLs = [URL]() {
+    private var audioFileURLs = [URL]() {
         didSet {
             guard !audioFileURLs.isEmpty else { return }
             audioFileURLs.forEach{
@@ -89,6 +87,8 @@ public class AudioPlayer {
             }
         }
     }
+    
+    public var delegate: AudioPlayerDelegate?
     
     public var isPlaying: Bool {
         return players.contains { $0.isPlaying }
@@ -99,17 +99,7 @@ public class AudioPlayer {
     }
     
     public init() { }
-    
-    public func prepare() {
-        guard !audioFiles.isEmpty else {
-            fatalError("No audio file set to be played")
-        }
         
-        audioFiles.forEach(preparePlayer)
-        engine.prepare()
-        schedulers.forEach(schedule)
-    }
-    
     private func preparePlayer(for item: AudioFileItem) {
         let player = AVAudioPlayerNode()
         players.append(player)
@@ -163,7 +153,7 @@ public class AudioPlayer {
     
     private func startTimer() {
         if timer == nil {
-            let timer = Timer(timeInterval: 0.5, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
+            let timer = Timer(timeInterval: 0.1, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
             RunLoop.current.add(timer, forMode: .common)
             self.timer = timer
         }

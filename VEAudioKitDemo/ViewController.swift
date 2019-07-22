@@ -93,8 +93,7 @@ class ViewController: UIViewController {
     }
     
     private func audioPlayerSetup() {
-        audioPlayer.audioFileURLs = [airplaneAudioURL]
-        audioPlayer.prepare()
+        audioPlayer.appendAudioFile(url: airplaneAudioURL)
         audioPlayer.delegate = self
     }
     
