@@ -52,7 +52,8 @@ class ViewController: UIViewController {
     
     private let audioPlayer = AudioPlayer()
     
-    private let audioFileURL = Bundle.main.url(forResource: "airplane", withExtension: "mp3")
+    private let airplaneAudioURL = Bundle.main.url(forResource: "airplane", withExtension: "mp3")!
+    private let dogAudioURL = Bundle.main.url(forResource: "dog", withExtension: "mp3")!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +71,7 @@ class ViewController: UIViewController {
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
         
-        tracksView = TracksView(trackDuration: audioPlayer.duration)
+        tracksView = TracksView(trackDuration: audioPlayer.audioFiles.first!.duration)
         
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
         [controlsStackView, progressBar, tracksView, UIView()].forEach(contentStackView.addArrangedSubview)
@@ -89,7 +90,7 @@ class ViewController: UIViewController {
     }
     
     private func audioPlayerSetup() {
-        audioPlayer.audioFileURL = audioFileURL
+        audioPlayer.audioFileURLs = [airplaneAudioURL]
         audioPlayer.prepare()
         audioPlayer.delegate = self
     }
@@ -105,7 +106,8 @@ class ViewController: UIViewController {
     }
     
     @objc func plus10() {
-
+        audioPlayer.appendAudioFile(url: dogAudioURL)
+        tracksView.addTrack(duration: audioPlayer.audioFiles.dropFirst().first!.duration)
     }
     
     @objc func minus10() {
@@ -130,6 +132,38 @@ extension ViewController: AudioPlayerDelegate {
 
 class TracksView: UIProgressView {
     
+    class Track: UIView {
+        
+        private let trackView: UIView = {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = .white
+            return view
+        }()
+        
+        var leadingConstraint: NSLayoutConstraint!
+        var trailingConstraint: NSLayoutConstraint!
+        
+        init() {
+            super.init(frame: .zero)
+            setup()
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func setup() {
+            addSubview(trackView)
+            leadingConstraint = trackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0)
+            leadingConstraint.isActive = true
+            trailingConstraint = trackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0)
+            trailingConstraint.isActive = true
+            trackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            trackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        }
+    }
+    
     private let indicator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -141,6 +175,7 @@ class TracksView: UIProgressView {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
+        stackView.spacing = 8
         stackView.distribution = .fillEqually
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
@@ -149,10 +184,14 @@ class TracksView: UIProgressView {
     
     private var indicatorLeadingConstraint: NSLayoutConstraint?
     
-    private var tracks = [UIView]()
+    private var tracks = [Track]()
     private var durations = [Float]()
     
-    var duration: Float
+    var duration: Float {
+        return durations.reduce(0) { (result, duration) -> Float in
+            return result > duration ? result : duration
+        }
+    }
     
     override var progress: Float {
         didSet {
@@ -166,10 +205,8 @@ class TracksView: UIProgressView {
     }
     
     init(trackDuration: Float) {
-        duration = trackDuration
         super.init(frame: .zero)
-        durations.append(trackDuration)
-        addTrack(duration: duration)
+        addTrack(duration: trackDuration)
         setup()
     }
     
@@ -196,11 +233,20 @@ class TracksView: UIProgressView {
     }
     
     func addTrack(duration: Float, starting: Float = 0) {
-        let track = UIView()
+        let track = Track()
         track.translatesAutoresizingMaskIntoConstraints = false
-        track.backgroundColor = .white
+        track.backgroundColor = .clear
         track.heightAnchor.constraint(equalToConstant: 30).isActive = true
         tracks.append(track)
         tracksContainer.addArrangedSubview(track)
+        durations.append(duration)
+        updateTracks()
+    }
+    
+    func updateTracks() {
+        for (track, duration) in zip(tracks, durations) {
+            track.leadingConstraint.constant = 0
+            track.trailingConstraint.constant = -CGFloat((self.duration - duration) / self.duration) * self.frame.width
+        }
     }
 }
