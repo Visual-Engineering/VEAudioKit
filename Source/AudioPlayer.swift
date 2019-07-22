@@ -64,17 +64,6 @@ public class AudioPlayer {
         }
     }
     
-//    private var audioFile: AVAudioFile? {
-//        didSet {
-//            if let audioFile = audioFile {
-//                audioLengthSamples = audioFile.length
-//                audioFormat = audioFile.processingFormat
-//                audioSampleRate = Float(audioFormat?.sampleRate ?? 44100)
-//                audioLengthSeconds = Float(audioLengthSamples) / audioSampleRate
-//            }
-//        }
-//    }
-    
     private var audioFormat: AVAudioFormat?
     private var audioSampleRate: Float = 0
     private var audioLengthSeconds: Float = 0
@@ -95,15 +84,14 @@ public class AudioPlayer {
         didSet {
             guard !audioFileURLs.isEmpty else { return }
             audioFileURLs.forEach{
-                let file = try! AVAudioFile(forReading: $0)
+                guard let file = try? AVAudioFile(forReading: $0) else { return }
                 audioFiles.append(AudioFileItem(file: file))
             }
-//            audioFile = try? AVAudioFile(forReading: url)
         }
     }
     
     public var isPlaying: Bool {
-        return players.first!.isPlaying
+        return players.contains { $0.isPlaying }
     }
     
     public var duration: Float {
@@ -120,14 +108,6 @@ public class AudioPlayer {
         audioFiles.forEach(preparePlayer)
         engine.prepare()
         schedulers.forEach(schedule)
-        
-//        scheduler = Scheduler(player: player, file: audioFile)
-//
-//        engine.attach(player)
-//        engine.connect(player, to: engine.mainMixerNode, format: audioFormat)
-//        engine.prepare()
-
-//        scheduler.scheduleFile()
     }
     
     private func preparePlayer(for item: AudioFileItem) {
@@ -144,8 +124,7 @@ public class AudioPlayer {
     }
     
     public func play() {
-//        guard !player.isPlaying else { return }
-        
+        guard !isPlaying else { return }
         if !engine.isRunning {
             do {
                 try engine.start()
@@ -157,16 +136,12 @@ public class AudioPlayer {
         guard let startTime = players.first!.lastRenderTime?.sampleTime else { return }
         startTimer()
         players.forEach { $0.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate))) }
-        
-//        player.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate)))
     }
     
     public func pause() {
-//        guard player.isPlaying else { return }
+        guard isPlaying else { return }
         cancelTimer()
         players.forEach { $0.pause() }
-        
-//        player.pause()
     }
     
     public func appendAudioFile(url: URL, delay: Float = 0) {
