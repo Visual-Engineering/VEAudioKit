@@ -31,11 +31,11 @@ class TracksProgressView: UIProgressView {
     private var indicatorLeadingConstraint: NSLayoutConstraint?
     
     private var tracks = [TrackView]()
-    private var durations = [Float]()
+    private var tracksData = [TrackData]()
     
     var totalDuration: Float {
-        return durations.reduce(0) { (result, duration) -> Float in
-            return result > duration ? result : duration
+        return tracksData.reduce(0) { (result, data) -> Float in
+            return result > data.duration ? result : data.duration
         }
     }
         
@@ -78,28 +78,38 @@ class TracksProgressView: UIProgressView {
         trackTintColor = .clear
     }
     
-    func addTrack(duration: Float, starting: Float = 0) {
+    func addTrack(data: TrackData) {
         let trackView = TrackView()
         trackView.translatesAutoresizingMaskIntoConstraints = false
         trackView.backgroundColor = .clear
         trackView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         tracksContainer.addArrangedSubview(trackView)
         tracks.append(trackView)
-        durations.append(duration)
+        tracksData.append(data)
         updateTrackViews()
     }
     
     private func updateTrackViews() {
-        for (track, duration) in zip(tracks, durations) {
+        for (track, data) in zip(tracks, tracksData) {
             track.leadingConstraint.constant = 0
-            track.trailingConstraint.constant = -CGFloat((totalDuration - duration) / totalDuration) * self.frame.width
+            track.trailingConstraint.constant = -CGFloat((totalDuration - data.duration) / totalDuration) * self.frame.width
         }
     }
 }
 
 extension TracksProgressView {
     
-    class TrackView: UIView {
+    struct TrackData {
+        let duration: Float
+        let startingSeconds: [Float]
+        
+        init(duration: Float, startingSeconds: [Float] = []) {
+            self.duration = duration
+            self.startingSeconds = startingSeconds
+        }
+    }
+    
+    private class TrackView: UIView {
         
         private let trackView: UIView = {
             let track = UIView()

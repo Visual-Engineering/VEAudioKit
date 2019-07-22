@@ -72,7 +72,7 @@ class ViewController: UIViewController {
             contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
         
         tracksView = TracksProgressView()
-        tracksView.addTrack(duration: audioPlayer.audioFiles.first!.duration)
+        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration))
         
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
         [controlsStackView, progressBar, tracksView, UIView()].forEach(contentStackView.addArrangedSubview)
@@ -118,7 +118,7 @@ class ViewController: UIViewController {
     
     @objc func addTrack() {
         audioPlayer.appendAudioFile(url: dogAudioURL)
-        tracksView.addTrack(duration: audioPlayer.audioFiles.dropFirst().first!.duration)
+        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.dropFirst().first!.duration))
     }
 }
 
