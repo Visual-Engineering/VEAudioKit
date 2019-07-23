@@ -35,7 +35,8 @@ class TracksProgressView: UIProgressView {
     
     var totalDuration: Float {
         return tracksData.reduce(0) { (result, data) -> Float in
-            return result > data.duration ? result : data.duration
+            let duration = data.start + data.duration
+            return result > duration ? result : duration
         }
     }
         
@@ -91,8 +92,8 @@ class TracksProgressView: UIProgressView {
     
     private func updateTrackViews() {
         for (track, data) in zip(tracks, tracksData) {
-            track.leadingConstraint.constant = 0
-            track.trailingConstraint.constant = -CGFloat((totalDuration - data.duration) / totalDuration) * self.frame.width
+            track.leadingConstraint.constant = CGFloat(data.start / totalDuration) * self.frame.width
+            track.trailingConstraint.constant = -CGFloat((totalDuration - data.start - data.duration) / totalDuration) * self.frame.width
         }
     }
 }
@@ -101,11 +102,11 @@ extension TracksProgressView {
     
     struct TrackData {
         let duration: Float
-        let startingSeconds: [Float]
+        let start: Float
         
-        init(duration: Float, startingSeconds: [Float] = []) {
+        init(duration: Float, startingAt second: Float = 0) {
             self.duration = duration
-            self.startingSeconds = startingSeconds
+            self.start = second
         }
     }
     

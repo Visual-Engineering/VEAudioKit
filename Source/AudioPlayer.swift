@@ -16,7 +16,7 @@ public struct AudioFileItem {
     let file: AVAudioFile
     let delay: Float
     
-    // Duration in seconds
+    // Duration in seconds (delay included)
     public var duration: Float {
         let lengthSamples = file.length
         let sampleRate = file.processingFormat.sampleRate
@@ -103,7 +103,7 @@ public class AudioPlayer {
     private func preparePlayer(for item: AudioFileItem) {
         let player = AVAudioPlayerNode()
         players.append(player)
-        let scheduler = Scheduler(player: player, file: item.file)
+        let scheduler = Scheduler(player: player, file: item.file, startFrames: [AVAudioFramePosition(item.delay * item.sampleRate)])
         schedulers.append(scheduler)
         engine.attach(player)
         engine.connect(player, to: engine.mainMixerNode, format: audioFormat)

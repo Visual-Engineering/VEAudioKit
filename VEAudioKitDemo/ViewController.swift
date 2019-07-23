@@ -49,17 +49,20 @@ class ViewController: UIViewController {
     private let progressBar = UIProgressView()
     private var tracksView: TracksProgressView!
     
+    private let counterLabel = UILabel()
     
     private let audioPlayer = AudioPlayer()
     
     private let airplaneAudioURL = Bundle.main.url(forResource: "airplane", withExtension: "mp3")!
     private let dogAudioURL = Bundle.main.url(forResource: "dog", withExtension: "mp3")!
+    private let alienSpaceShipURL = Bundle.main.url(forResource: "alien-spaceship", withExtension: "mp3")!
+    lazy private var audios = [airplaneAudioURL, dogAudioURL, alienSpaceShipURL]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        audioPlayerSetup()
         layout()
+        audioPlayerSetup()
         setup()
     }
     
@@ -72,8 +75,7 @@ class ViewController: UIViewController {
             contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
         
         tracksView = TracksProgressView()
-        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration))
-        
+
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
         [controlsStackView, tracksView, UIView()].forEach(contentStackView.addArrangedSubview)
     }
@@ -94,7 +96,8 @@ class ViewController: UIViewController {
     }
     
     private func audioPlayerSetup() {
-        audioPlayer.appendAudioFile(url: airplaneAudioURL)
+        audioPlayer.appendAudioFile(url: audios.first!, delay: 0)
+        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration))
         audioPlayer.delegate = self
     }
     
@@ -117,8 +120,11 @@ class ViewController: UIViewController {
     }
     
     @objc func addTrack() {
-        audioPlayer.appendAudioFile(url: dogAudioURL)
-        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.dropFirst().first!.duration))
+        let index = audioPlayer.audioFiles.count
+        guard index < audios.count else { return }
+        let delay: Float = Float(index * 3)
+        audioPlayer.appendAudioFile(url: audios[index], delay: delay)
+        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles[index].duration - delay, startingAt: delay))
     }
     
     @objc func reset() {
