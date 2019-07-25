@@ -15,8 +15,7 @@ public protocol AudioPlayerDelegate {
 public class AudioPlayer {
     
     private var engine = AVAudioEngine()
-    private var players = [AVAudioPlayerNode]()
-    private var schedulers = [Scheduler]()
+    private var players = [SinglePlayer]()
     
     public private(set) var audioFiles = [AudioItem]() {
         didSet {
@@ -40,22 +39,12 @@ public class AudioPlayer {
     
     private var timer: Timer?
     private var currentFrame: AVAudioFramePosition {
-        guard let lastRenderTime = players.first!.lastRenderTime, let playerTime = players.first!.playerTime(forNodeTime: lastRenderTime) else {
+        guard let frame = players.first?.currentFrame else {
             return 0
         }
-        return playerTime.sampleTime
+        return frame
     }
     private var currentPosition: AVAudioFramePosition = 0
-    
-    private var audioFileURLs = [URL]() {
-        didSet {
-            guard !audioFileURLs.isEmpty else { return }
-            audioFileURLs.forEach{
-                guard let file = try? AVAudioFile(forReading: $0) else { return }
-                audioFiles.append(AudioFileItem(file: file))
-            }
-        }
-    }
     
     public var delegate: AudioPlayerDelegate?
     
@@ -69,19 +58,6 @@ public class AudioPlayer {
     
     public init() { }
     
-    private func preparePlayer(for item: AudioFileItem) {
-        let player = AVAudioPlayerNode()
-        players.append(player)
-        let scheduler = Scheduler(player: player, file: item.file, startFrames: [AVAudioFramePosition(item.delay * item.sampleRate)])
-        schedulers.append(scheduler)
-        engine.attach(player)
-        engine.connect(player, to: engine.mainMixerNode, format: audioFormat)
-    }
-    
-    private func schedule(_ scheduler: Scheduler) {
-        scheduler.scheduleFile()
-    }
-    
     public func play() {
         guard !isPlaying else { return }
         if !engine.isRunning {
@@ -92,7 +68,7 @@ public class AudioPlayer {
             }
         }
         
-        guard let startTime = players.first!.lastRenderTime?.sampleTime else { return }
+        guard let startTime = players.first?.playbackPosition else { return }
         startTimer()
         players.forEach { $0.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate))) }
     }
@@ -108,17 +84,14 @@ public class AudioPlayer {
     }
     
     public func scheduleFiles() {
-        schedulers.forEach(schedule)
+        //        schedulers.forEach(schedule)
     }
     
     public func appendAudioFile(url: URL, delay: Float = 0) {
         let file = try! AVAudioFile(forReading: url)
         let item = AudioItem(file: file, delay: delay)
         audioFiles.append(item)
-        preparePlayer(for: item)
-        engine.prepare()
-        guard let scheduler = schedulers.last else { fatalError() }
-        schedule(scheduler)
+        players.append(SinglePlayer(engine: engine, audioItem: item))
     }
     
     @objc func updatePlayerPosition() {
