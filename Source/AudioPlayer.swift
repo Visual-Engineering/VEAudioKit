@@ -12,50 +12,19 @@ public protocol AudioPlayerDelegate {
     func playerDidUpdatePosition(seconds: Float)
 }
 
-public struct AudioFileItem {
-    let file: AVAudioFile
-    let delay: Float
-    
-    // Duration in seconds (delay included)
-    public var duration: Float {
-        let lengthSamples = file.length
-        let sampleRate = file.processingFormat.sampleRate
-        return Float(Double(lengthSamples) / sampleRate) + delay
-    }
-    
-    // Length
-    var length: AVAudioFramePosition {
-        let delayLength = AVAudioFramePosition(Double(delay) * file.processingFormat.sampleRate)
-        return delayLength + file.length
-    }
-    
-    var audioFormat: AVAudioFormat {
-        return file.processingFormat
-    }
-    
-    var sampleRate: Float {
-        return Float(audioFormat.sampleRate)
-    }
-    
-    init(file: AVAudioFile, delay: Float = 0) {
-        self.file = file
-        self.delay = delay
-    }
-}
-
 public class AudioPlayer {
     
     private var engine = AVAudioEngine()
     private var players = [AVAudioPlayerNode]()
     private var schedulers = [Scheduler]()
     
-    public private(set) var audioFiles = [AudioFileItem]() {
+    public private(set) var audioFiles = [AudioItem]() {
         didSet {
             guard !audioFiles.isEmpty else { return }
             audioLengthSamples = audioFiles.reduce(0) { (result, audioFileItem) -> AVAudioFramePosition in
                 return result > audioFileItem.length ? result : audioFileItem.length
             }
-            let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioFileItem in
+            let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
                 return result.sampleRate < audioFileItem.sampleRate ? result : audioFileItem
             }
             audioFormat = item.audioFormat
@@ -144,7 +113,7 @@ public class AudioPlayer {
     
     public func appendAudioFile(url: URL, delay: Float = 0) {
         let file = try! AVAudioFile(forReading: url)
-        let item = AudioFileItem(file: file, delay: delay)
+        let item = AudioItem(file: file, delay: delay)
         audioFiles.append(item)
         preparePlayer(for: item)
         engine.prepare()
