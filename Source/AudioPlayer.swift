@@ -45,6 +45,8 @@ public struct AudioFileItem {
 
 public class AudioPlayer {
     
+    static let PlayerPositionUpdatingTimeInterval: TimeInterval = 0.1
+    
     private var engine = AVAudioEngine()
     private var players = [AVAudioPlayerNode]()
     private var schedulers = [Scheduler]()
@@ -161,7 +163,7 @@ public class AudioPlayer {
     
     private func startTimer() {
         if timer == nil {
-            let timer = Timer(timeInterval: 0.1, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
+            let timer = Timer(timeInterval: AudioPlayer.PlayerPositionUpdatingTimeInterval, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
             RunLoop.current.add(timer, forMode: .common)
             self.timer = timer
         }

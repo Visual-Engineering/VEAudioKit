@@ -44,7 +44,7 @@ class TracksProgressView: UIProgressView {
         didSet {
             if let constraint = indicatorLeadingConstraint {
                 constraint.constant = CGFloat(progress) * self.frame.width
-                UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: { [weak self] in
+                UIView.animate(withDuration: AudioPlayer.PlayerPositionUpdatingTimeInterval, delay: 0, options: .curveLinear, animations: { [weak self] in
                     self?.layoutIfNeeded()
                     }, completion: nil)
             }
