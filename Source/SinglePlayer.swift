@@ -7,25 +7,23 @@
 
 import AVFoundation
 
+protocol SinglePlayerDelegate {
+    var currentPosition: AVAudioFramePosition { get }
+    var skipFrame: AVAudioFramePosition { get }
+}
+
 class SinglePlayer {
     
     private let playerNode: AVAudioPlayerNode
     private let scheduler: Scheduler
     private unowned let engine: AVAudioEngine
     
-    private var audioItem: AudioItem {
-        didSet {
-            audioFormat = audioItem.audioFormat
-            audioSampleRate = audioItem.sampleRate
-            audioLengthSamples = audioItem.length
-            audioLengthSeconds = Float(audioLengthSamples) / audioSampleRate
-        }
-    }
+    private(set) var audioItem: AudioItem
     
     private var audioFormat: AVAudioFormat?
-    private var audioSampleRate: Float = 0
-    private var audioLengthSamples: AVAudioFramePosition = 0
-    private var audioLengthSeconds: Float = 0
+    private var audioSampleRate: Float
+    private var audioLengthSamples: AVAudioFramePosition
+    private var audioLengthSeconds: Float
     
     var currentFrame: AVAudioFramePosition {
         guard let lastRenderTime = playerNode.lastRenderTime, let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime) else {
@@ -33,7 +31,6 @@ class SinglePlayer {
         }
         return playerTime.sampleTime
     }
-    var currentPosition: AVAudioFramePosition = 0
     var playbackPosition: AVAudioFramePosition {
         guard let lastRenderTime = playerNode.lastRenderTime else {
             return 0
@@ -45,11 +42,17 @@ class SinglePlayer {
         return playerNode.isPlaying
     }
     
+    var delegate: SinglePlayerDelegate?
+    
     init(engine: AVAudioEngine, audioItem: AudioItem) {
         self.playerNode = AVAudioPlayerNode()
         self.audioItem = audioItem
         self.scheduler = Scheduler(player: playerNode, file: audioItem.file, startFrames: [audioItem.delay * audioItem.sampleRate])
         self.engine = engine
+        self.audioFormat = audioItem.audioFormat
+        self.audioSampleRate = audioItem.sampleRate
+        self.audioLengthSamples = audioItem.length
+        self.audioLengthSeconds = Float(audioLengthSamples) / audioSampleRate
         setup()
     }
     
@@ -72,7 +75,15 @@ class SinglePlayer {
         playerNode.stop()
     }
     
-    func seek(to second: Float) {
-        
+    func seek(to second: Float, playbackTime: AVAudioTime?) {
+        guard let currentPosition = delegate?.currentPosition,
+            let skipFrame = delegate?.skipFrame else { return }
+        playerNode.stop()
+        if currentPosition < audioLengthSamples {
+            scheduler.scheduleFile(startingAt: skipFrame)
+            if let playbackTime = playbackTime {
+                playerNode.play(at: playbackTime)
+            }
+        }
     }
 }

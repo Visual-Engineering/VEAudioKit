@@ -12,10 +12,16 @@ public protocol AudioPlayerDelegate {
     func playerDidUpdatePosition(seconds: Float)
 }
 
-public class AudioPlayer {
+public class AudioPlayer: SinglePlayerDelegate {
     
     private var engine = AVAudioEngine()
     private var players = [SinglePlayer]()
+    private var referencePlayer: SinglePlayer? {
+        return players.reduce(nil) { (result, player) in
+            guard let result = result else { return player }
+            return result.audioItem.duration > player.audioItem.duration ? result : player
+        }
+    }
     
     public private(set) var audioFiles = [AudioItem]() {
         didSet {
@@ -38,13 +44,14 @@ public class AudioPlayer {
     private var audioLengthSamples: AVAudioFramePosition = 0
     
     private var timer: Timer?
-    private var currentFrame: AVAudioFramePosition {
-        guard let frame = players.first?.currentFrame else {
+    var currentFrame: AVAudioFramePosition {
+        guard let frame = referencePlayer?.currentFrame else {
             return 0
         }
         return frame
     }
-    private var currentPosition: AVAudioFramePosition = 0
+    var currentPosition: AVAudioFramePosition = 0
+    var skipFrame: AVAudioFramePosition = 0
     
     public var delegate: AudioPlayerDelegate?
     
@@ -68,7 +75,7 @@ public class AudioPlayer {
             }
         }
         
-        guard let startTime = players.first?.playbackPosition else { return }
+        guard let startTime = referencePlayer?.playbackPosition else { return }
         startTimer()
         players.forEach { $0.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate))) }
     }
@@ -87,15 +94,31 @@ public class AudioPlayer {
         //        schedulers.forEach(schedule)
     }
     
+    public func seek(to second: Float) {
+        skipFrame = currentPosition + AVAudioFramePosition(second * audioSampleRate)
+        skipFrame = max(min(skipFrame, audioLengthSamples), 0)
+        currentPosition = skipFrame
+        if currentPosition < audioLengthSamples {
+            guard let playbackSampleTime = referencePlayer?.playbackPosition else { return }
+            let playbackTime = isPlaying ? AVAudioTime(sampleTime: playbackSampleTime, atRate: Double(audioSampleRate)) : nil
+            players.forEach {
+                $0.seek(to: second, playbackTime: playbackTime)
+            }
+        }
+        updatePlayerPosition()
+    }
+    
     public func appendAudioFile(url: URL, delay: Float = 0) {
         let file = try! AVAudioFile(forReading: url)
         let item = AudioItem(file: file, delay: delay)
         audioFiles.append(item)
-        players.append(SinglePlayer(engine: engine, audioItem: item))
+        let player = SinglePlayer(engine: engine, audioItem: item)
+        player.delegate = self
+        players.append(player)
     }
     
     @objc func updatePlayerPosition() {
-        currentPosition = currentFrame
+        currentPosition = currentFrame + skipFrame
         currentPosition = max(min(currentPosition, audioLengthSamples), 0)
         let seconds = Float(currentPosition) / audioSampleRate
         delegate?.playerDidUpdatePosition(seconds: seconds)

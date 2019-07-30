@@ -112,11 +112,11 @@ class ViewController: UIViewController {
     }
     
     @objc func plus10() {
-        
+        audioPlayer.seek(to: 3)
     }
     
     @objc func minus10() {
-        
+        audioPlayer.seek(to: -3)
     }
     
     @objc func addTrack() {
