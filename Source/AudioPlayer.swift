@@ -43,7 +43,7 @@ public class AudioPlayer: SinglePlayerDelegate {
     private var audioLengthSeconds: Float = 0
     private var audioLengthSamples: AVAudioFramePosition = 0
     
-    private var timer: Timer?
+    var updater: Timer?
     var currentFrame: AVAudioFramePosition {
         guard let frame = referencePlayer?.currentFrame else {
             return 0
@@ -116,24 +116,15 @@ public class AudioPlayer: SinglePlayerDelegate {
         player.delegate = self
         players.append(player)
     }
+}
+
+// MARK: - AudioPlayerUpdating
+extension AudioPlayer: AudioPlayerUpdating {
     
-    @objc func updatePlayerPosition() {
+    func updatePlayerPosition() {
         currentPosition = currentFrame + skipFrame
         currentPosition = max(min(currentPosition, audioLengthSamples), 0)
         let seconds = Float(currentPosition) / audioSampleRate
         delegate?.playerDidUpdatePosition(seconds: seconds)
-    }
-    
-    private func startTimer() {
-        if timer == nil {
-            let timer = Timer(timeInterval: 0.1, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
-            RunLoop.current.add(timer, forMode: .common)
-            self.timer = timer
-        }
-    }
-    
-    private func cancelTimer() {
-        timer?.invalidate()
-        timer = nil
     }
 }
