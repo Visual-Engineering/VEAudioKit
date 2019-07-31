@@ -7,11 +7,6 @@
 
 import AVFoundation
 
-protocol SinglePlayerDelegate {
-    var currentPosition: AVAudioFramePosition { get }
-    var skipFrame: AVAudioFramePosition { get }
-}
-
 class SinglePlayer {
     
     private let playerNode: AVAudioPlayerNode
@@ -41,8 +36,6 @@ class SinglePlayer {
     var isPlaying: Bool {
         return playerNode.isPlaying
     }
-    
-    var delegate: SinglePlayerDelegate?
     
     init(engine: AVAudioEngine, audioItem: AudioItem) {
         self.playerNode = AVAudioPlayerNode()
@@ -75,15 +68,11 @@ class SinglePlayer {
         playerNode.stop()
     }
     
-    func seek(to second: Float, playbackTime: AVAudioTime?) {
-        guard let currentPosition = delegate?.currentPosition,
-            let skipFrame = delegate?.skipFrame else { return }
+    func seek(to frame: AVAudioFramePosition, playbackTime: AVAudioTime?) {
         playerNode.stop()
-        if currentPosition < audioLengthSamples {
-            scheduler.scheduleFile(startingAt: skipFrame)
-            if let playbackTime = playbackTime {
-                playerNode.play(at: playbackTime)
-            }
+        scheduler.scheduleFile(startingAt: frame)
+        if let playbackTime = playbackTime {
+            playerNode.play(at: playbackTime)
         }
     }
     

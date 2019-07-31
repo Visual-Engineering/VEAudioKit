@@ -12,7 +12,7 @@ public protocol AudioPlayerDelegate {
     func playerDidUpdatePosition(seconds: Float)
 }
 
-public class AudioPlayer: SinglePlayerDelegate {
+public class AudioPlayer {
     
     private var engine = AVAudioEngine()
     private var players = [SinglePlayer]()
@@ -103,7 +103,7 @@ public class AudioPlayer: SinglePlayerDelegate {
             guard let playbackSampleTime = referencePlayer?.playbackPosition else { return }
             let playbackTime = isPlaying ? AVAudioTime(sampleTime: playbackSampleTime, atRate: Double(audioSampleRate)) : nil
             players.forEach {
-                $0.seek(to: second, playbackTime: playbackTime)
+                $0.seek(to: skipFrame, playbackTime: playbackTime)
             }
         }
         updatePlayerPosition()
@@ -114,7 +114,6 @@ public class AudioPlayer: SinglePlayerDelegate {
         let item = AudioItem(file: file, delay: delay)
         audioFiles.append(item)
         let player = SinglePlayer(engine: engine, audioItem: item)
-        player.delegate = self
         players.append(player)
     }
 }
