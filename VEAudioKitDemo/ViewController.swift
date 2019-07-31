@@ -128,8 +128,7 @@ class ViewController: UIViewController {
     }
     
     @objc func reset() {
-        audioPlayer.stop()
-        audioPlayer.scheduleFiles()
+        audioPlayer.reload()
         playButton.isSelected = false
         tracksView.progress = 0
     }

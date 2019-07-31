@@ -90,8 +90,9 @@ public class AudioPlayer: SinglePlayerDelegate {
         players.forEach { $0.stop() }
     }
     
-    public func scheduleFiles() {
-        //        schedulers.forEach(schedule)
+    public func reload() {
+        skipFrame = 0
+        players.forEach { $0.reload() }
     }
     
     public func seek(to second: Float) {

@@ -86,4 +86,9 @@ class SinglePlayer {
             }
         }
     }
+    
+    func reload() {
+        playerNode.stop()
+        scheduler.scheduleFile()
+    }
 }
