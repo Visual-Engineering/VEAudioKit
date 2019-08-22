@@ -20,17 +20,8 @@ class SinglePlayer {
     private var audioLengthSamples: AVAudioFramePosition
     private var audioLengthSeconds: Float
     
-    var currentFrame: AVAudioFramePosition {
-        guard let lastRenderTime = playerNode.lastRenderTime, let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime) else {
-            return 0
-        }
-        return playerTime.sampleTime
-    }
-    var playbackPosition: AVAudioFramePosition {
-        guard let lastRenderTime = playerNode.lastRenderTime else {
-            return 0
-        }
-        return lastRenderTime.sampleTime
+    var playbackTime: AVAudioTime? {
+        return playerNode.lastRenderTime
     }
     
     var isPlaying: Bool {
@@ -68,10 +59,11 @@ class SinglePlayer {
         playerNode.stop()
     }
     
-    func seek(to frame: AVAudioFramePosition, playbackTime: AVAudioTime?) {
+    func seek(to second: Float, isPlaying: Bool) {
         playerNode.stop()
+        let frame = AVAudioFramePosition(second * audioSampleRate)
         scheduler.scheduleFile(startingAt: frame)
-        if let playbackTime = playbackTime {
+        if isPlaying {
             playerNode.play(at: playbackTime)
         }
     }

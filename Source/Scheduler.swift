@@ -36,7 +36,9 @@ class Scheduler {
         for case let range in ranges where range.contains(frame) {
             let segmentCount = AVAudioFrameCount(range.lowerBound + file.length - frame)
             let startingFrame = file.length - AVAudioFramePosition(segmentCount)
-            player.scheduleSegment(file, startingFrame: startingFrame, frameCount: segmentCount, at: nil, completionHandler: nil)
+            if startingFrame < file.length {
+                player.scheduleSegment(file, startingFrame: startingFrame, frameCount: segmentCount, at: nil, completionHandler: nil)
+            }
         }
         
         guard let lastFrame = startFrames.last, frame < lastFrame else { return }

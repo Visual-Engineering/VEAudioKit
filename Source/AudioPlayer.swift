@@ -15,43 +15,22 @@ public protocol AudioPlayerDelegate {
 public class AudioPlayer {
     
     private var engine = AVAudioEngine()
+    private let timeline = Timeline()
     private var players = [SinglePlayer]()
-    private var referencePlayer: SinglePlayer? {
-        return players.reduce(nil) { (result, player) in
-            guard let result = result else { return player }
-            return result.audioItem.duration > player.audioItem.duration ? result : player
-        }
-    }
     
     public private(set) var audioFiles = [AudioItem]() {
         didSet {
             guard !audioFiles.isEmpty else { return }
-            audioLengthSamples = audioFiles.reduce(0) { (result, audioFileItem) -> AVAudioFramePosition in
-                return result > audioFileItem.length ? result : audioFileItem.length
+            let item_ = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
+                return result.length > audioFileItem.length ? result : audioFileItem
             }
-            let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
-                return result.sampleRate < audioFileItem.sampleRate ? result : audioFileItem
-            }
-            audioFormat = item.audioFormat
-            audioSampleRate = item.sampleRate
-            audioLengthSeconds = Float(audioLengthSamples) / audioSampleRate
+            audioLengthSamples = item_.length
+            audioLengthSeconds = Float(audioLengthSamples) / item_.sampleRate
         }
     }
     
-    private var audioFormat: AVAudioFormat?
-    private var audioSampleRate: Float = 0
     private var audioLengthSeconds: Float = 0
     private var audioLengthSamples: AVAudioFramePosition = 0
-    
-    var updater: Timer?
-    var currentFrame: AVAudioFramePosition {
-        guard let frame = referencePlayer?.currentFrame else {
-            return 0
-        }
-        return frame
-    }
-    var currentPosition: AVAudioFramePosition = 0
-    var skipFrame: AVAudioFramePosition = 0
     
     public var delegate: AudioPlayerDelegate?
     
@@ -63,7 +42,9 @@ public class AudioPlayer {
         return audioLengthSeconds
     }
     
-    public init() { }
+    public init() {
+        timeline.delegate = self
+    }
     
     public func play() {
         guard !isPlaying else { return }
@@ -75,38 +56,40 @@ public class AudioPlayer {
             }
         }
         
-        guard let startTime = referencePlayer?.playbackPosition else { return }
-        startTimer()
-        players.forEach { $0.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate))) }
+        timeline.start()
+        players.forEach {
+            guard let playbackTime = $0.playbackTime else { return }
+            $0.play(at: playbackTime)
+        }
     }
     
     public func pause() {
         guard isPlaying else { return }
-        cancelTimer()
+        timeline.pause()
         players.forEach { $0.pause() }
     }
     
     public func stop() {
+        timeline.reset()
         players.forEach { $0.stop() }
     }
     
     public func reload() {
-        skipFrame = 0
+        timeline.reset()
         players.forEach { $0.reload() }
     }
     
     public func seek(to second: Float) {
-        skipFrame = currentPosition + AVAudioFramePosition(second * audioSampleRate)
-        skipFrame = max(min(skipFrame, audioLengthSamples), 0)
-        currentPosition = skipFrame
-        if currentPosition < audioLengthSamples {
-            guard let playbackSampleTime = referencePlayer?.playbackPosition else { return }
-            let playbackTime = isPlaying ? AVAudioTime(sampleTime: playbackSampleTime, atRate: Double(audioSampleRate)) : nil
+        timeline.seek(Double(second))
+        let currrentSecond = max(min(Float(timeline.currentTime), audioLengthSeconds), 0)
+        if currrentSecond <= audioLengthSeconds {
+            if !isPlaying {
+                delegate?.playerDidUpdatePosition(seconds: currrentSecond)
+            }
             players.forEach {
-                $0.seek(to: skipFrame, playbackTime: playbackTime)
+                $0.seek(to: currrentSecond, isPlaying: isPlaying)
             }
         }
-        updatePlayerPosition()
     }
     
     public func appendAudioFile(url: URL, delay: Float = 0) {
@@ -118,13 +101,19 @@ public class AudioPlayer {
     }
 }
 
-// MARK: - AudioPlayerUpdating
-extension AudioPlayer: AudioPlayerUpdating {
+// MARK: - TimelineDelegate
+extension AudioPlayer: TimelineDelegate {
     
-    func updatePlayerPosition() {
-        currentPosition = currentFrame + skipFrame
-        currentPosition = max(min(currentPosition, audioLengthSamples), 0)
-        let seconds = Float(currentPosition) / audioSampleRate
-        delegate?.playerDidUpdatePosition(seconds: seconds)
+    var length: TimeInterval {
+        return TimeInterval(audioLengthSeconds)
+    }
+    
+    func currentTimeDidUpdate(time: Double) {
+        let currentTime = max(min(Float(time), audioLengthSeconds), 0)
+        delegate?.playerDidUpdatePosition(seconds: currentTime)
+    }
+    
+    func timelineDidReachEnd() {
+        delegate?.playerDidEnd()
     }
 }

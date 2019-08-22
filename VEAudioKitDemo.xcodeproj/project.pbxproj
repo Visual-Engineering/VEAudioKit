@@ -18,6 +18,8 @@
 		F45A76E922D341E600BCE573 /* VEAudioKitDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A76E822D341E600BCE573 /* VEAudioKitDemoTests.swift */; };
 		F45C427822D6318900E084BC /* airplane.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F45C427622D6318800E084BC /* airplane.mp3 */; };
 		F45C427922D6318900E084BC /* dog.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F45C427722D6318900E084BC /* dog.mp3 */; };
+		F4F1DF87230BF50200DD494A /* signal-8khz.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F1DF86230BF50200DD494A /* signal-8khz.wav */; };
+		F4F1DF89230BF52100DD494A /* signal-22050hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4F1DF88230BF52100DD494A /* signal-22050hz.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,8 @@
 		F45A76EA22D341E600BCE573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F45C427622D6318800E084BC /* airplane.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = airplane.mp3; sourceTree = "<group>"; };
 		F45C427722D6318900E084BC /* dog.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dog.mp3; sourceTree = "<group>"; };
+		F4F1DF86230BF50200DD494A /* signal-8khz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "signal-8khz.wav"; sourceTree = "<group>"; };
+		F4F1DF88230BF52100DD494A /* signal-22050hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "signal-22050hz.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,8 @@
 				F45C427622D6318800E084BC /* airplane.mp3 */,
 				F45C427722D6318900E084BC /* dog.mp3 */,
 				F41B762A22E70267003D7794 /* alien-spaceship.mp3 */,
+				F4F1DF86230BF50200DD494A /* signal-8khz.wav */,
+				F4F1DF88230BF52100DD494A /* signal-22050hz.wav */,
 			);
 			path = VEAudioKitDemo;
 			sourceTree = "<group>";
@@ -224,7 +230,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F45C427822D6318900E084BC /* airplane.mp3 in Resources */,
+				F4F1DF87230BF50200DD494A /* signal-8khz.wav in Resources */,
 				F45A76DE22D341E500BCE573 /* LaunchScreen.storyboard in Resources */,
+				F4F1DF89230BF52100DD494A /* signal-22050hz.wav in Resources */,
 				F45A76DB22D341E500BCE573 /* Assets.xcassets in Resources */,
 				F45C427922D6318900E084BC /* dog.mp3 in Resources */,
 				F41B762B22E70268003D7794 /* alien-spaceship.mp3 in Resources */,

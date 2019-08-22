@@ -12,28 +12,21 @@ public struct AudioItem {
     let delay: Float
     
     // Duration in seconds (delay included)
-    public var duration: Float {
-        let lengthSamples = file.length
-        let sampleRate = file.processingFormat.sampleRate
-        return Float(Double(lengthSamples) / sampleRate) + delay
-    }
+    public var duration: Float
     
-    // Length
-    var length: AVAudioFramePosition {
-        let delayLength = AVAudioFramePosition(Double(delay) * file.processingFormat.sampleRate)
-        return delayLength + file.length
-    }
+    // Length in samples (delay included)
+    var length: AVAudioFramePosition
     
-    var audioFormat: AVAudioFormat {
-        return file.processingFormat
-    }
+    var audioFormat: AVAudioFormat
     
-    var sampleRate: Float {
-        return Float(audioFormat.sampleRate)
-    }
+    var sampleRate: Float
     
     init(file: AVAudioFile, delay: Float = 0) {
         self.file = file
         self.delay = delay
+        self.length = AVAudioFramePosition(Double(delay) * file.processingFormat.sampleRate) + file.length
+        self.audioFormat = file.processingFormat
+        self.sampleRate = Float(audioFormat.sampleRate)
+        self.duration = Float(length) / sampleRate
     }
 }
