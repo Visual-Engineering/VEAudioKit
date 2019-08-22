@@ -12,20 +12,57 @@ public protocol AudioPlayerDelegate {
     func playerDidUpdatePosition(seconds: Float)
 }
 
+public struct AudioFileItem {
+    let file: AVAudioFile
+    let delay: Float
+    
+    // Duration in seconds (delay included)
+    public var duration: Float {
+        let lengthSamples = file.length
+        let sampleRate = file.processingFormat.sampleRate
+        return Float(Double(lengthSamples) / sampleRate) + delay
+    }
+    
+    // Length
+    var length: AVAudioFramePosition {
+        let delayLength = AVAudioFramePosition(Double(delay) * file.processingFormat.sampleRate)
+        return delayLength + file.length
+    }
+    
+    var audioFormat: AVAudioFormat {
+        return file.processingFormat
+    }
+    
+    var sampleRate: Float {
+        return Float(audioFormat.sampleRate)
+    }
+    
+    init(file: AVAudioFile, delay: Float = 0) {
+        self.file = file
+        self.delay = delay
+    }
+}
+
 public class AudioPlayer {
     
-    private var engine = AVAudioEngine()
-    private var player = AVAudioPlayerNode()
-    private var scheduler: Scheduler!
+    static let PlayerPositionUpdatingTimeInterval: TimeInterval = 0.1
     
-    private var audioFile: AVAudioFile? {
+    private var engine = AVAudioEngine()
+    private var players = [AVAudioPlayerNode]()
+    private var schedulers = [Scheduler]()
+    
+    public private(set) var audioFiles = [AudioFileItem]() {
         didSet {
-            if let audioFile = audioFile {
-                audioLengthSamples = audioFile.length
-                audioFormat = audioFile.processingFormat
-                audioSampleRate = Float(audioFormat?.sampleRate ?? 44100)
-                audioLengthSeconds = Float(audioLengthSamples) / audioSampleRate
+            guard !audioFiles.isEmpty else { return }
+            audioLengthSamples = audioFiles.reduce(0) { (result, audioFileItem) -> AVAudioFramePosition in
+                return result > audioFileItem.length ? result : audioFileItem.length
             }
+            let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioFileItem in
+                return result.sampleRate < audioFileItem.sampleRate ? result : audioFileItem
+            }
+            audioFormat = item.audioFormat
+            audioSampleRate = item.sampleRate
+            audioLengthSeconds = Float(audioLengthSamples) / audioSampleRate
         }
     }
     
@@ -36,25 +73,27 @@ public class AudioPlayer {
     
     private var timer: Timer?
     private var currentFrame: AVAudioFramePosition {
-        guard let lastRenderTime = player.lastRenderTime, let playerTime = player.playerTime(forNodeTime: lastRenderTime) else {
+        guard let lastRenderTime = players.first!.lastRenderTime, let playerTime = players.first!.playerTime(forNodeTime: lastRenderTime) else {
             return 0
         }
         return playerTime.sampleTime
     }
     private var currentPosition: AVAudioFramePosition = 0
     
-    public var delegate: AudioPlayerDelegate?
-    
-    public var audioFileURL: URL? {
+    private var audioFileURLs = [URL]() {
         didSet {
-            if let url = audioFileURL {
-                audioFile = try? AVAudioFile(forReading: url)
+            guard !audioFileURLs.isEmpty else { return }
+            audioFileURLs.forEach{
+                guard let file = try? AVAudioFile(forReading: $0) else { return }
+                audioFiles.append(AudioFileItem(file: file))
             }
         }
     }
     
+    public var delegate: AudioPlayerDelegate?
+    
     public var isPlaying: Bool {
-        return player.isPlaying
+        return players.contains { $0.isPlaying }
     }
     
     public var duration: Float {
@@ -63,23 +102,21 @@ public class AudioPlayer {
     
     public init() { }
     
-    public func prepare() {
-        guard let audioFile = audioFile else {
-            fatalError("No audio file set to be played")
-        }
-        
-        scheduler = Scheduler(player: player, file: audioFile)
-        
+    private func preparePlayer(for item: AudioFileItem) {
+        let player = AVAudioPlayerNode()
+        players.append(player)
+        let scheduler = Scheduler(player: player, file: item.file, startFrames: [AVAudioFramePosition(item.delay * item.sampleRate)])
+        schedulers.append(scheduler)
         engine.attach(player)
         engine.connect(player, to: engine.mainMixerNode, format: audioFormat)
-        engine.prepare()
-        
+    }
+    
+    private func schedule(_ scheduler: Scheduler) {
         scheduler.scheduleFile()
     }
     
     public func play() {
-        guard !player.isPlaying else { return }
-        
+        guard !isPlaying else { return }
         if !engine.isRunning {
             do {
                 try engine.start()
@@ -88,15 +125,33 @@ public class AudioPlayer {
             }
         }
         
-        guard let startTime = player.lastRenderTime?.sampleTime else { return }
+        guard let startTime = players.first!.lastRenderTime?.sampleTime else { return }
         startTimer()
-        player.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate)))
+        players.forEach { $0.play(at: AVAudioTime(sampleTime: startTime, atRate: Double(audioSampleRate))) }
     }
     
     public func pause() {
-        guard player.isPlaying else { return }
+        guard isPlaying else { return }
         cancelTimer()
-        player.pause()
+        players.forEach { $0.pause() }
+    }
+    
+    public func stop() {
+        players.forEach { $0.stop() }
+    }
+    
+    public func scheduleFiles() {
+        schedulers.forEach(schedule)
+    }
+    
+    public func appendAudioFile(url: URL, delay: Float = 0) {
+        let file = try! AVAudioFile(forReading: url)
+        let item = AudioFileItem(file: file, delay: delay)
+        audioFiles.append(item)
+        preparePlayer(for: item)
+        engine.prepare()
+        guard let scheduler = schedulers.last else { fatalError() }
+        schedule(scheduler)
     }
     
     @objc func updatePlayerPosition() {
@@ -108,7 +163,7 @@ public class AudioPlayer {
     
     private func startTimer() {
         if timer == nil {
-            let timer = Timer(timeInterval: 0.5, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
+            let timer = Timer(timeInterval: AudioPlayer.PlayerPositionUpdatingTimeInterval, target: self, selector: #selector(updatePlayerPosition), userInfo: nil, repeats: true)
             RunLoop.current.add(timer, forMode: .common)
             self.timer = timer
         }

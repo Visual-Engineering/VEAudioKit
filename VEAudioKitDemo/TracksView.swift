@@ -8,13 +8,13 @@
 
 import UIKit
 
-class TracksView: UIProgressView {
+class TracksProgressView: UIProgressView {
     
     private let indicator: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black
-        return view
+        let indicator = UIView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.backgroundColor = .black
+        return indicator
     }()
     
     private let tracksContainer: UIStackView = {
@@ -29,12 +29,22 @@ class TracksView: UIProgressView {
     }()
     
     private var indicatorLeadingConstraint: NSLayoutConstraint?
+    
+    private var tracks = [TrackView]()
+    private var tracksData = [TrackData]()
+    
+    var totalDuration: Float {
+        return tracksData.reduce(0) { (result, data) -> Float in
+            let duration = data.start + data.duration
+            return result > duration ? result : duration
+        }
+    }
         
     override var progress: Float {
         didSet {
             if let constraint = indicatorLeadingConstraint {
                 constraint.constant = CGFloat(progress) * self.frame.width
-                UIView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: { [weak self] in
+                UIView.animate(withDuration: AudioPlayer.PlayerPositionUpdatingTimeInterval, delay: 0, options: .curveLinear, animations: { [weak self] in
                     self?.layoutIfNeeded()
                     }, completion: nil)
             }
@@ -53,27 +63,83 @@ class TracksView: UIProgressView {
     private func setup() {
         addSubview(tracksContainer)
         addSubview(indicator)
+        
+        indicatorLeadingConstraint = indicator.leadingAnchor.constraint(equalTo: self.leadingAnchor)
         NSLayoutConstraint.activate([
             indicator.topAnchor.constraint(equalTo: self.topAnchor),
             indicator.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             indicator.widthAnchor.constraint(equalToConstant: 2),
+            indicatorLeadingConstraint!,
             tracksContainer.topAnchor.constraint(equalTo: self.topAnchor),
             tracksContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tracksContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             tracksContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor)])
-        indicatorLeadingConstraint = indicator.leadingAnchor.constraint(equalTo: self.leadingAnchor)
-        indicatorLeadingConstraint?.isActive = true
         
         progressTintColor = .clear
         trackTintColor = .clear
     }
     
-    func addTrack(duration: Float, starting: Float = 0) {
-        let trackView = UIView()
+    func addTrack(data: TrackData) {
+        let trackView = TrackView()
         trackView.translatesAutoresizingMaskIntoConstraints = false
-        trackView.backgroundColor = .white
+        trackView.backgroundColor = .clear
         trackView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         tracksContainer.addArrangedSubview(trackView)
+        tracks.append(trackView)
+        tracksData.append(data)
+        updateTrackViews()
+    }
+    
+    private func updateTrackViews() {
+        for (track, data) in zip(tracks, tracksData) {
+            track.leadingConstraint.constant = CGFloat(data.start / totalDuration) * self.frame.width
+            track.trailingConstraint.constant = -CGFloat((totalDuration - data.start - data.duration) / totalDuration) * self.frame.width
+        }
     }
 }
 
+extension TracksProgressView {
+    
+    struct TrackData {
+        let duration: Float
+        let start: Float
+        
+        init(duration: Float, startingAt second: Float = 0) {
+            self.duration = duration
+            self.start = second
+        }
+    }
+    
+    private class TrackView: UIView {
+        
+        private let trackView: UIView = {
+            let track = UIView()
+            track.translatesAutoresizingMaskIntoConstraints = false
+            track.backgroundColor = .white
+            return track
+        }()
+        
+        var leadingConstraint: NSLayoutConstraint!
+        var trailingConstraint: NSLayoutConstraint!
+        
+        init() {
+            super.init(frame: .zero)
+            setup()
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func setup() {
+            addSubview(trackView)
+            leadingConstraint = trackView.leadingAnchor.constraint(equalTo: leadingAnchor)
+            trailingConstraint = trackView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            NSLayoutConstraint.activate([
+                trackView.topAnchor.constraint(equalTo: topAnchor),
+                trackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                leadingConstraint,
+                trailingConstraint])
+        }
+    }
+}
