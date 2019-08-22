@@ -14,6 +14,8 @@ public protocol AudioPlayerDelegate {
 
 public class AudioPlayer {
     
+    public static let PlayerPositionUpdateRate: TimeInterval = 0.1
+    
     private var engine = AVAudioEngine()
     private let timeline = Timeline()
     private var players = [SinglePlayer]()
@@ -106,6 +108,10 @@ extension AudioPlayer: TimelineDelegate {
     
     var length: TimeInterval {
         return TimeInterval(audioLengthSeconds)
+    }
+    
+    var timeUpdateRate: TimeInterval {
+        return AudioPlayer.PlayerPositionUpdateRate
     }
     
     func currentTimeDidUpdate(time: Double) {
