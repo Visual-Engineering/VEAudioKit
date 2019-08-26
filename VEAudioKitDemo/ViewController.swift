@@ -46,6 +46,12 @@ class ViewController: UIViewController {
         return button
     }()
     
+    private let editButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Edit", for: .normal)
+        return button
+    }()
+    
     private let progressBar = UIProgressView()
     private var tracksView: TracksProgressView!
     
@@ -79,7 +85,7 @@ class ViewController: UIViewController {
         tracksView = TracksProgressView()
 
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
-        [controlsStackView, tracksView, UIView()].forEach(contentStackView.addArrangedSubview)
+        [controlsStackView, tracksView, editButton, UIView()].forEach(contentStackView.addArrangedSubview)
     }
 
     private func setup() {
@@ -89,6 +95,7 @@ class ViewController: UIViewController {
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
         skipForwardButton.addTarget(self, action: #selector(plus10), for: .touchUpInside)
         skipBackwardButton.addTarget(self, action: #selector(minus10), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editTrack), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrack))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(reset))
@@ -134,6 +141,15 @@ class ViewController: UIViewController {
         audioPlayer.reload()
         playButton.isSelected = false
         tracksView.progress = 0
+    }
+    
+    @objc func editTrack() {
+        playButton.isSelected = false
+        let index = 0
+        let delay: Float = 6
+        audioPlayer.setDelay(delay, for: audioPlayer.audioFiles[index])
+        tracksView.tracksData[index] = TracksProgressView.TrackData(duration: audioPlayer.audioFiles[index].duration - delay, startingAt: delay)
+        playerDidUpdatePosition(seconds: Float(audioPlayer.currentTime))
     }
 }
 
