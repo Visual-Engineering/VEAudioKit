@@ -30,3 +30,10 @@ public struct AudioItem {
         self.duration = Float(length) / sampleRate
     }
 }
+
+extension AudioItem: Equatable {
+    
+    public static func ==(lhs: AudioItem, rhs: AudioItem) -> Bool {
+        return lhs.file == rhs.file && lhs.delay == rhs.delay
+    }
+}

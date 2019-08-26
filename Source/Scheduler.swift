@@ -11,7 +11,7 @@ class Scheduler {
     
     private unowned var player: AVAudioPlayerNode
     private let file: AVAudioFile
-    private let startFrames: [AVAudioFramePosition]
+    var startFrames: [AVAudioFramePosition]
     
     private var sampleRate: Double {
         return file.processingFormat.sampleRate
