@@ -23,11 +23,11 @@ public class AudioPlayer {
     public private(set) var audioFiles = [AudioItem]() {
         didSet {
             guard !audioFiles.isEmpty else { return }
-            let item_ = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
+            let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
                 return result.length > audioFileItem.length ? result : audioFileItem
             }
-            audioLengthSamples = item_.length
-            audioLengthSeconds = Float(audioLengthSamples) / item_.sampleRate
+            audioLengthSamples = item.length
+            audioLengthSeconds = Float(audioLengthSamples) / item.sampleRate
         }
     }
     
@@ -83,13 +83,13 @@ public class AudioPlayer {
     
     public func seek(to second: Float) {
         timeline.seek(Double(second))
-        let currrentSecond = max(min(Float(timeline.currentTime), audioLengthSeconds), 0)
-        if currrentSecond <= audioLengthSeconds {
+        let currentSecond = Float(timeline.currentTime).bounded(by: 0...audioLengthSeconds)
+        if currentSecond <= audioLengthSeconds {
             if !isPlaying {
-                delegate?.playerDidUpdatePosition(seconds: currrentSecond)
+                delegate?.playerDidUpdatePosition(seconds: currentSecond)
             }
             players.forEach {
-                $0.seek(to: currrentSecond, isPlaying: isPlaying)
+                $0.seek(to: currentSecond, isPlaying: isPlaying)
             }
         }
     }
@@ -115,7 +115,7 @@ extension AudioPlayer: TimelineDelegate {
     }
     
     func currentTimeDidUpdate(time: Double) {
-        let currentTime = max(min(Float(time), audioLengthSeconds), 0)
+        let currentTime = Float(time).bounded(by: 0...audioLengthSeconds)
         delegate?.playerDidUpdatePosition(seconds: currentTime)
     }
     

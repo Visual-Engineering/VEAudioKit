@@ -43,7 +43,7 @@ class Timeline {
     var currentTime: Double {
         guard let length = delegate?.length else { return 0 }
         let time = lastPauseTime + currentElapsedTime
-        return max(min(length, time), 0)
+        return time.bounded(by: 0...length)
     }
     
     /// A `Bool` indicating whether the timeline is active or not
@@ -109,7 +109,7 @@ class Timeline {
     func seek(_ seconds: Double) {
         guard let length = delegate?.length else { return }
         lastPauseTime += currentElapsedTime + seconds
-        lastPauseTime = max(min(length, lastPauseTime), 0)
+        lastPauseTime = lastPauseTime.bounded(by: 0...length)
         timer.stop()
         currentElapsedTime = 0
         if running { timer.start() }
