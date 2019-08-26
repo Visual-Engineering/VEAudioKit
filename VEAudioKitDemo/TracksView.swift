@@ -32,7 +32,11 @@ class TracksProgressView: UIProgressView {
     private var indicatorLeadingConstraint: NSLayoutConstraint?
     
     private var tracks = [TrackView]()
-    private var tracksData = [TrackData]()
+    var tracksData = [TrackData]() {
+        didSet {
+            updateTrackViews()
+        }
+    }
     
     var totalDuration: Float {
         return tracksData.reduce(0) { (result, data) -> Float in

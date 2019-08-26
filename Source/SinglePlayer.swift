@@ -13,12 +13,16 @@ class SinglePlayer {
     private let scheduler: Scheduler
     private unowned let engine: AVAudioEngine
     
-    private(set) var audioItem: AudioItem
-    
     private var audioFormat: AVAudioFormat?
     private var audioSampleRate: Float
     private var audioLengthSamples: AVAudioFramePosition
     private var audioLengthSeconds: Float
+    
+    var audioItem: AudioItem {
+        didSet {
+            scheduler.startFrames = [AVAudioFramePosition(audioItem.delay * audioItem.sampleRate)]
+        }
+    }
     
     var playbackTime: AVAudioTime? {
         return playerNode.lastRenderTime

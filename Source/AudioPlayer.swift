@@ -22,12 +22,7 @@ public class AudioPlayer {
     
     public private(set) var audioFiles = [AudioItem]() {
         didSet {
-            guard !audioFiles.isEmpty else { return }
-            let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
-                return result.length > audioFileItem.length ? result : audioFileItem
-            }
-            audioLengthSamples = item.length
-            audioLengthSeconds = Float(audioLengthSamples) / item.sampleRate
+            updatePlayerLength()
         }
     }
     
@@ -42,6 +37,10 @@ public class AudioPlayer {
     
     public var duration: Float {
         return audioLengthSeconds
+    }
+    
+    public var currentTime: Double {
+        return timeline.currentTime
     }
     
     public init() {
@@ -100,6 +99,26 @@ public class AudioPlayer {
         audioFiles.append(item)
         let player = SinglePlayer(engine: engine, audioItem: item)
         players.append(player)
+    }
+    
+    public func setDelay(_ delay: Float, for item: AudioItem) {
+        pause()
+        guard let index = audioFiles.firstIndex(of: item) else { return }
+        let player = players[index]
+        let item = AudioItem(file: player.audioItem.file, delay: delay)
+        player.audioItem = item
+        audioFiles[index] = item
+        updatePlayerLength()
+        player.seek(to: Float(timeline.currentTime), isPlaying: false)
+    }
+    
+    private func updatePlayerLength() {
+        guard !audioFiles.isEmpty else { return }
+        let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
+            return result.duration > audioFileItem.duration ? result : audioFileItem
+        }
+        audioLengthSamples = item.length
+        audioLengthSeconds = Float(audioLengthSamples) / item.sampleRate
     }
 }
 
