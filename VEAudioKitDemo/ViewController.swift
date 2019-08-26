@@ -56,7 +56,9 @@ class ViewController: UIViewController {
     private let airplaneAudioURL = Bundle.main.url(forResource: "airplane", withExtension: "mp3")!
     private let dogAudioURL = Bundle.main.url(forResource: "dog", withExtension: "mp3")!
     private let alienSpaceShipURL = Bundle.main.url(forResource: "alien-spaceship", withExtension: "mp3")!
-    lazy private var audios = [airplaneAudioURL, dogAudioURL, alienSpaceShipURL]
+    private let signal8k = Bundle.main.url(forResource: "signal-8khz", withExtension: "wav")!
+    private let signal22k = Bundle.main.url(forResource: "signal-22050hz", withExtension: "wav")!
+    lazy private var audios = [signal8k, signal22k]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,8 +98,9 @@ class ViewController: UIViewController {
     }
     
     private func audioPlayerSetup() {
-        audioPlayer.appendAudioFile(url: audios.first!, delay: 0)
-        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration))
+        let delay: Float = 0
+        audioPlayer.appendAudioFile(url: audios.first!, delay: delay)
+        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration - delay, startingAt: delay))
         audioPlayer.delegate = self
     }
     
@@ -112,11 +115,11 @@ class ViewController: UIViewController {
     }
     
     @objc func plus10() {
-        
+        audioPlayer.seek(to: 3)
     }
     
     @objc func minus10() {
-        
+        audioPlayer.seek(to: -3)
     }
     
     @objc func addTrack() {
@@ -128,8 +131,7 @@ class ViewController: UIViewController {
     }
     
     @objc func reset() {
-        audioPlayer.stop()
-        audioPlayer.scheduleFiles()
+        audioPlayer.reload()
         playButton.isSelected = false
         tracksView.progress = 0
     }
@@ -138,7 +140,7 @@ class ViewController: UIViewController {
 extension ViewController: AudioPlayerDelegate {
     
     func playerDidEnd() {
-        
+        play()
     }
     
     func playerDidUpdatePosition(seconds: Float) {
