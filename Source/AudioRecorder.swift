@@ -14,14 +14,25 @@ public protocol AudioRecorderDelegate {
 
 public class AudioRecorder: NSObject {
     
+    enum AudioFormat: String {
+        case m4a
+        
+        var id: AudioFormatID {
+            switch self {
+            case .m4a: return kAudioFormatMPEG4AAC
+            }
+        }
+    }
+    
     public var delegate: AudioRecorderDelegate?
     
     public var audioFileName = "recording"
     public var audioSampleRate = 12000
     public var audioQuality: AVAudioQuality = .high
+    private var audioFormat: AudioFormat = .m4a
     
     public var recordingFile: AVAudioFile? {
-        let url = documentsDirectory.appendingPathComponent("\(audioFileName).m4a")
+        let url = documentsDirectory.appendingPathComponent("\(audioFileName).\(audioFormat.rawValue)")
         return try? AVAudioFile(forReading: url)
     }
     
@@ -39,7 +50,7 @@ public class AudioRecorder: NSObject {
     }
     
     public func record() {
-        let audiofilePath = documentsDirectory.appendingPathComponent("\(audioFileName).m4a")
+        let audiofilePath = documentsDirectory.appendingPathComponent("\(audioFileName).\(audioFormat.rawValue)")
         do {
             recorder = try AVAudioRecorder(url: audiofilePath, settings: recordingSettings)
             recorder.delegate = self
@@ -65,7 +76,7 @@ private extension AudioRecorder {
     
     var recordingSettings: [String: Any] {
         return [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVFormatIDKey: Int(audioFormat.id),
             AVSampleRateKey: audioSampleRate,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: audioQuality.rawValue]
