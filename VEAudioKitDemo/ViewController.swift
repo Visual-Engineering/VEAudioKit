@@ -8,6 +8,7 @@
 
 import UIKit
 import VEAudioKit
+import AVFoundation
 
 class ViewController: UIViewController {
     
@@ -49,6 +50,19 @@ class ViewController: UIViewController {
     private let editButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Edit", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        return button
+    }()
+    
+    private let recordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Start recording", for: .normal)
+        button.setTitle("Stop recording", for: .selected)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.black, for: .selected)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.tintColor = .clear
         return button
     }()
     
@@ -58,6 +72,7 @@ class ViewController: UIViewController {
     private let counterLabel = UILabel()
     
     private let audioPlayer = AudioPlayer()
+    private let audioRecorder = AudioRecorder()
     
     private let airplaneAudioURL = Bundle.main.url(forResource: "airplane", withExtension: "mp3")!
     private let dogAudioURL = Bundle.main.url(forResource: "dog", withExtension: "mp3")!
@@ -70,7 +85,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         layout()
-        audioPlayerSetup()
+        audioKitSetup()
         setup()
     }
     
@@ -85,7 +100,7 @@ class ViewController: UIViewController {
         tracksView = TracksProgressView()
 
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
-        [controlsStackView, tracksView, editButton, UIView()].forEach(contentStackView.addArrangedSubview)
+        [controlsStackView, tracksView, editButton, recordButton, UIView()].forEach(contentStackView.addArrangedSubview)
     }
 
     private func setup() {
@@ -96,6 +111,7 @@ class ViewController: UIViewController {
         skipForwardButton.addTarget(self, action: #selector(plus10), for: .touchUpInside)
         skipBackwardButton.addTarget(self, action: #selector(minus10), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(editTrack), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrack))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(reset))
@@ -104,11 +120,20 @@ class ViewController: UIViewController {
         progressBar.progressTintColor = .black
     }
     
-    private func audioPlayerSetup() {
-        let delay: Float = 0
-        audioPlayer.appendAudioFile(url: audios.first!, delay: delay)
-        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration - delay, startingAt: delay))
+    private func audioKitSetup() {
+//        let delay: Float = 0
+//        audioPlayer.appendAudioFile(url: audios.first!, delay: delay)
+//        tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles.first!.duration - delay, startingAt: delay))
         audioPlayer.delegate = self
+        audioRecorder.delegate = self
+        
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playAndRecord)
+            try audioSession.overrideOutputAudioPort(.speaker)
+        } catch {
+            print("Error configuring audio session")
+        }
     }
     
     @objc func play() {
@@ -151,6 +176,16 @@ class ViewController: UIViewController {
         tracksView.tracksData[index] = TracksProgressView.TrackData(duration: audioPlayer.audioFiles[index].duration - delay, startingAt: delay)
         playerDidUpdatePosition(seconds: Float(audioPlayer.currentTime))
     }
+    
+    @objc func startRecording() {
+        if !audioRecorder.isRecording {
+            recordButton.isSelected = true
+            audioRecorder.record()
+        } else {
+            recordButton.isSelected = false
+            audioRecorder.stop()
+        }
+    }
 }
 
 extension ViewController: AudioPlayerDelegate {
@@ -163,5 +198,24 @@ extension ViewController: AudioPlayerDelegate {
         let progress = seconds / audioPlayer.duration
         tracksView.progress = progress
         progressBar.progress = progress
+    }
+}
+
+extension ViewController: AudioRecorderDelegate {
+    
+    func recordingDidFinish(successfully flag: Bool) {
+        if flag {
+            guard let file = audioRecorder.recordingFile else { return }
+            audioPlayer.appendAudioFile(url: file.url)
+            let duration = audioPlayer.audioFiles.last!.duration
+            tracksView.addTrack(data: TracksProgressView.TrackData(duration: duration))
+        } else {
+            recordButton.isSelected = false
+            print("Recording failed")
+        }
+    }
+    
+    func recorderDidUpdatePower(_ power: Float) {
+        print("Power: \(power)")
     }
 }
