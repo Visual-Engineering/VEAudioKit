@@ -92,8 +92,8 @@ private extension AudioRecorder {
 
 extension AudioRecorder: AVAudioRecorderDelegate {
     
-    public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if !flag {
+    public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {
+        if !success {
             finishRecording(success: false)
         }
     }
