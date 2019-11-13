@@ -10,6 +10,7 @@ import AVFoundation
 public protocol AudioRecorderDelegate {
     func recordingDidFinish(successfully flag: Bool)
     func recorderDidUpdatePower(_ power: Float)
+    func recorderDidUpdateTime(_ seconds: Float)
 }
 
 public class AudioRecorder: NSObject {
@@ -108,6 +109,7 @@ extension AudioRecorder: TimerDelegate {
             let averagePower = recorder.averagePower(forChannel: 0)
             let normalizedPower = pow(10, averagePower / 20)
             delegate?.recorderDidUpdatePower(normalizedPower)
+            delegate?.recorderDidUpdateTime(Float(time.seconds))
         }
     }
 }

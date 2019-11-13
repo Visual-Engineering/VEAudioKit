@@ -10,6 +10,7 @@ import AVFoundation
 public protocol AudioPlayerDelegate {
     func playerDidEnd()
     func playerDidUpdatePosition(seconds: Float)
+    func playerDidUpdateVolumeMeter(_ value: Float)
 }
 
 public class AudioPlayer {
@@ -57,6 +58,7 @@ public class AudioPlayer {
             }
         }
         
+        connectVolumeTap()
         timeline.start()
         players.forEach {
             guard let playbackTime = $0.playbackTime else { return }
@@ -66,16 +68,19 @@ public class AudioPlayer {
     
     public func pause() {
         guard isPlaying else { return }
+        disconnectVolumeTap()
         timeline.pause()
         players.forEach { $0.pause() }
     }
     
     public func stop() {
+        disconnectVolumeTap()
         timeline.reset()
         players.forEach { $0.stop() }
     }
     
     public func reload() {
+        disconnectVolumeTap()
         timeline.reset()
         players.forEach { $0.reload() }
     }
@@ -119,6 +124,42 @@ public class AudioPlayer {
         }
         audioLengthSamples = item.length
         audioLengthSeconds = Float(audioLengthSamples) / item.sampleRate
+    }
+    
+    private func connectVolumeTap() {
+        let format = engine.mainMixerNode.outputFormat(forBus: 0)
+        engine.mainMixerNode.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, when in
+
+            guard let channelData = buffer.floatChannelData else {
+              return
+            }
+
+            let channelDataValue = channelData.pointee
+            let channelDataValueArray = stride(from: 0,
+                                             to: Int(buffer.frameLength),
+                                             by: buffer.stride).map{ channelDataValue[$0] }
+
+            let rms = channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength)
+            let avgPower = 20 * log10(rms)
+            let meterLevel = self.scaledPower(power: avgPower)
+            self.delegate?.playerDidUpdateVolumeMeter(meterLevel)
+        }
+    }
+    
+    private func scaledPower(power: Float) -> Float {
+        guard power.isFinite else { return 0.0 }
+        let minDb: Float = -80
+        if power < minDb {
+        return 0.0
+        } else if power >= 1.0 {
+        return 1.0
+        } else {
+            return (abs(minDb) - abs(power)) / abs(minDb)
+      }
+    }
+
+    func disconnectVolumeTap() {
+        engine.mainMixerNode.removeTap(onBus: 0)
     }
 }
 

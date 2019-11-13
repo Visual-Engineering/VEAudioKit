@@ -199,6 +199,10 @@ extension ViewController: AudioPlayerDelegate {
         tracksView.progress = progress
         progressBar.progress = progress
     }
+    
+    func playerDidUpdateVolumeMeter(_ value: Float) {
+        print("Volume meter: \(value)")
+    }
 }
 
 extension ViewController: AudioRecorderDelegate {
@@ -217,5 +221,9 @@ extension ViewController: AudioRecorderDelegate {
     
     func recorderDidUpdatePower(_ power: Float) {
         print("Power: \(power)")
+    }
+    
+    func recorderDidUpdateTime(_ seconds: Float) {
+        print("\(floor(seconds)) seconds")
     }
 }
