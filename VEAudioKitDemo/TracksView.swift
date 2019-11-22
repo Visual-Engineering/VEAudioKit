@@ -95,6 +95,15 @@ class TracksProgressView: UIProgressView {
         updateTrackViews()
     }
     
+    func clearTracks() {
+        tracks.forEach { track in
+            track.removeFromSuperview()
+        }
+        tracks = []
+        tracksData = []
+        indicatorLeadingConstraint?.constant = 0
+    }
+    
     private func updateTrackViews() {
         for (track, data) in zip(tracks, tracksData) {
             track.leadingConstraint.constant = CGFloat(data.start / totalDuration) * self.frame.width

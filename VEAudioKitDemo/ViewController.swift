@@ -66,6 +66,14 @@ class ViewController: UIViewController {
         return button
     }()
     
+    private let resetButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Reset audio player", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        return button
+    }()
+    
     private let progressBar = UIProgressView()
     private var tracksView: TracksProgressView!
     
@@ -100,7 +108,7 @@ class ViewController: UIViewController {
         tracksView = TracksProgressView()
 
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
-        [controlsStackView, tracksView, editButton, recordButton, UIView()].forEach(contentStackView.addArrangedSubview)
+        [controlsStackView, tracksView, editButton, recordButton, resetButton, UIView()].forEach(contentStackView.addArrangedSubview)
     }
 
     private func setup() {
@@ -112,9 +120,10 @@ class ViewController: UIViewController {
         skipBackwardButton.addTarget(self, action: #selector(minus10), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(editTrack), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
+        resetButton.addTarget(self, action: #selector(resetAudioPlayer), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrack))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(reset))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reload))
         
         progressBar.trackTintColor = .white
         progressBar.progressTintColor = .black
@@ -162,7 +171,7 @@ class ViewController: UIViewController {
         tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles[index].duration - delay, startingAt: delay))
     }
     
-    @objc func reset() {
+    @objc func reload() {
         audioPlayer.reload()
         playButton.isSelected = false
         tracksView.progress = 0
@@ -185,6 +194,12 @@ class ViewController: UIViewController {
             recordButton.isSelected = false
             audioRecorder.stop()
         }
+    }
+    
+    @objc func resetAudioPlayer() {
+        audioPlayer.reset()
+        tracksView.clearTracks()
+        playButton.isSelected = false
     }
 }
 

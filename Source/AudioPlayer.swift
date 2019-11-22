@@ -85,6 +85,14 @@ public class AudioPlayer {
         players.forEach { $0.reload() }
     }
     
+    public func reset() {
+        disconnectVolumeTap()
+        timeline.reset()
+        players.forEach { $0.stop() }
+        players = []
+        audioFiles = []
+    }
+    
     public func seek(to second: Float) {
         timeline.seek(Double(second))
         let currentSecond = Float(timeline.currentTime).bounded(by: 0...audioLengthSeconds)
@@ -118,7 +126,11 @@ public class AudioPlayer {
     }
     
     private func updatePlayerLength() {
-        guard !audioFiles.isEmpty else { return }
+        guard !audioFiles.isEmpty else {
+            audioLengthSamples = 0
+            audioLengthSeconds = 0
+            return
+        }
         let item = audioFiles.reduce(audioFiles.first!) { (result, audioFileItem) -> AudioItem in
             return result.duration > audioFileItem.duration ? result : audioFileItem
         }
