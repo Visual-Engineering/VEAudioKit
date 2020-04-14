@@ -22,6 +22,13 @@ class ViewController: UIViewController {
         return stackView
     }()
     
+    private let volumeSlidersStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let controlsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
@@ -108,7 +115,7 @@ class ViewController: UIViewController {
         tracksView = TracksProgressView()
 
         [skipBackwardButton, playButton, skipForwardButton].forEach(controlsStackView.addArrangedSubview)
-        [controlsStackView, tracksView, editButton, recordButton, resetButton, UIView()].forEach(contentStackView.addArrangedSubview)
+        [controlsStackView, tracksView, editButton, recordButton, resetButton, volumeSlidersStackView, UIView()].forEach(contentStackView.addArrangedSubview)
     }
 
     private func setup() {
@@ -167,8 +174,18 @@ class ViewController: UIViewController {
         let index = audioPlayer.audioFiles.count
         guard index < audios.count else { return }
         let delay: Float = Float(index * 3)
-        audioPlayer.appendAudioFile(url: audios[index], delay: delay)
+        let volume: Float = 0.1
+        audioPlayer.appendAudioFile(url: audios[index], delay: delay, volume: volume)
         tracksView.addTrack(data: TracksProgressView.TrackData(duration: audioPlayer.audioFiles[index].duration - delay, startingAt: delay))
+        let slider = UISlider()
+        slider.value = volume
+        slider.tag = index
+        slider.addTarget(self, action: #selector(changeVolume), for: .valueChanged)
+        volumeSlidersStackView.addArrangedSubview(slider)
+    }
+    
+    @objc func changeVolume(slider: UISlider) {
+        audioPlayer.updateVolume(slider.value, for: audioPlayer.audioFiles[slider.tag])
     }
     
     @objc func reload() {
@@ -200,6 +217,10 @@ class ViewController: UIViewController {
         audioPlayer.reset()
         tracksView.clearTracks()
         playButton.isSelected = false
+        volumeSlidersStackView.arrangedSubviews.forEach {
+            volumeSlidersStackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
     }
 }
 

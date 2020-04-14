@@ -106,9 +106,9 @@ public class AudioPlayer {
         }
     }
     
-    public func appendAudioFile(url: URL, delay: Float = 0) {
+    public func appendAudioFile(url: URL, delay: Float = 0, volume: Float = 1) {
         let file = try! AVAudioFile(forReading: url)
-        let item = AudioItem(file: file, delay: delay)
+        let item = AudioItem(file: file, delay: delay, volume: volume)
         audioFiles.append(item)
         let player = SinglePlayer(engine: engine, audioItem: item)
         players.append(player)
@@ -118,11 +118,17 @@ public class AudioPlayer {
         pause()
         guard let index = audioFiles.firstIndex(of: item) else { return }
         let player = players[index]
-        let item = AudioItem(file: player.audioItem.file, delay: delay)
+        let item = AudioItem(file: player.audioItem.file, delay: delay, volume: player.audioItem.volume)
         player.audioItem = item
         audioFiles[index] = item
         updatePlayerLength()
         player.seek(to: Float(timeline.currentTime), isPlaying: false)
+    }
+    
+    public func updateVolume(_ volume: Float, for item: AudioItem) {
+        guard let index = audioFiles.firstIndex(of: item) else { return }
+        let player = players[index]
+        player.volume = volume
     }
     
     private func updatePlayerLength() {

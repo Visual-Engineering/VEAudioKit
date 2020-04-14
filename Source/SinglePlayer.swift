@@ -32,9 +32,17 @@ class SinglePlayer {
         return playerNode.isPlaying
     }
     
+    var volume: Float {
+        didSet {
+            let boundedVolume = volume.bounded(by: 0...1)
+            playerNode.volume = boundedVolume
+        }
+    }
+    
     init(engine: AVAudioEngine, audioItem: AudioItem) {
         self.playerNode = AVAudioPlayerNode()
         self.audioItem = audioItem
+        self.volume = audioItem.volume
         self.scheduler = Scheduler(player: playerNode, file: audioItem.file, startFrames: [audioItem.delay * audioItem.sampleRate])
         self.engine = engine
         self.audioFormat = audioItem.audioFormat
@@ -48,6 +56,7 @@ class SinglePlayer {
         engine.attach(playerNode)
         engine.connect(playerNode, to: engine.mainMixerNode, format: audioFormat)
         engine.prepare()
+        playerNode.volume = audioItem.volume
         scheduler.scheduleFile()
     }
     
