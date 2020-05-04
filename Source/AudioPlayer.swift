@@ -8,9 +8,9 @@
 import AVFoundation
 
 public protocol AudioPlayerDelegate {
-    func playerDidEnd()
-    func playerDidUpdatePosition(seconds: Float)
-    func playerDidUpdateVolumeMeter(_ value: Float)
+    func playerDidFinish(_ player: AudioPlayer)
+    func player(_ player: AudioPlayer, didUpdatePosition seconds: Float)
+    func player(_ player: AudioPlayer, didUpdateVolumeMeter volume: Float)
 }
 
 public class AudioPlayer {
@@ -98,7 +98,7 @@ public class AudioPlayer {
         let currentSecond = Float(timeline.currentTime).bounded(by: 0...audioLengthSeconds)
         if currentSecond <= audioLengthSeconds {
             if !isPlaying {
-                delegate?.playerDidUpdatePosition(seconds: currentSecond)
+                delegate?.player(self, didUpdatePosition: currentSecond)
             }
             players.forEach {
                 $0.seek(to: currentSecond, isPlaying: isPlaying)
@@ -160,7 +160,7 @@ public class AudioPlayer {
             let rms = channelDataValueArray.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength)
             let avgPower = 20 * log10(rms)
             let meterLevel = self.scaledPower(power: avgPower)
-            self.delegate?.playerDidUpdateVolumeMeter(meterLevel)
+            self.delegate?.player(self, didUpdateVolumeMeter: meterLevel)
         }
     }
     
@@ -194,10 +194,10 @@ extension AudioPlayer: TimelineDelegate {
     
     func currentTimeDidUpdate(time: Double) {
         let currentTime = Float(time).bounded(by: 0...audioLengthSeconds)
-        delegate?.playerDidUpdatePosition(seconds: currentTime)
+        delegate?.player(self, didUpdatePosition: currentTime)
     }
     
     func timelineDidReachEnd() {
-        delegate?.playerDidEnd()
+        delegate?.playerDidFinish(self)
     }
 }

@@ -200,7 +200,7 @@ class ViewController: UIViewController {
         let delay: Float = 6
         audioPlayer.setDelay(delay, for: audioPlayer.audioFiles[index])
         tracksView.tracksData[index] = TracksProgressView.TrackData(duration: audioPlayer.audioFiles[index].duration - delay, startingAt: delay)
-        playerDidUpdatePosition(seconds: Float(audioPlayer.currentTime))
+        player(audioPlayer, didUpdatePosition: Float(audioPlayer.currentTime))
     }
     
     @objc func startRecording() {
@@ -226,18 +226,18 @@ class ViewController: UIViewController {
 
 extension ViewController: AudioPlayerDelegate {
     
-    func playerDidEnd() {
+    func playerDidFinish(_ player: AudioPlayer) {
         play()
     }
     
-    func playerDidUpdatePosition(seconds: Float) {
+    func player(_ player: AudioPlayer, didUpdatePosition seconds: Float) {
         let progress = seconds / audioPlayer.duration
         tracksView.progress = progress
         progressBar.progress = progress
     }
     
-    func playerDidUpdateVolumeMeter(_ value: Float) {
-        print("Volume meter: \(value)")
+    func player(_ player: AudioPlayer, didUpdateVolumeMeter volume: Float) {
+        print("Volume meter: \(volume)")
     }
 }
 
