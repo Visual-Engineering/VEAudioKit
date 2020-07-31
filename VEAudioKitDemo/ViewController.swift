@@ -9,6 +9,7 @@
 import UIKit
 import VEAudioKit
 import AVFoundation
+import MediaPlayer
 
 class ViewController: UIViewController {
     
@@ -95,6 +96,8 @@ class ViewController: UIViewController {
     private let signal8k = Bundle.main.url(forResource: "signal-8khz", withExtension: "wav")!
     private let signal22k = Bundle.main.url(forResource: "signal-22050hz", withExtension: "wav")!
     lazy private var audios = [signal8k, signal22k]
+    
+    private var nowPlayingInfo = [String: Any]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,6 +105,7 @@ class ViewController: UIViewController {
         layout()
         audioKitSetup()
         setup()
+        setupRemoteCommandCenter()
     }
     
     private func layout() {
@@ -150,6 +154,28 @@ class ViewController: UIViewController {
         } catch {
             print("Error configuring audio session")
         }
+    }
+    
+    private func setupRemoteCommandCenter() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.pauseCommand.isEnabled = true
+        
+        commandCenter.playCommand.addTarget { [weak self] _ in
+            print("command play")
+            self?.audioPlayer.play()
+            self?.playButton.isSelected = true
+            return .success
+        }
+        commandCenter.pauseCommand.addTarget { [weak self] _ in
+            print("command pause")
+            self?.audioPlayer.pause()
+            self?.playButton.isSelected = false
+            return .success
+        }
+        
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "Black Mamba"
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
     @objc func play() {

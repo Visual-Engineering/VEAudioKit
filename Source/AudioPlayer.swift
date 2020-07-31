@@ -71,6 +71,7 @@ public class AudioPlayer {
         disconnectVolumeTap()
         timeline.pause()
         players.forEach { $0.pause() }
+        engine.pause()
     }
     
     public func stop() {
